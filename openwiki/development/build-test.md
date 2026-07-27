@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Build, Test, and Cross-Compilation"
+description: "Build, test, and Windows cross-compilation guidance for the ytdl-rmcp Rust MCP server, including CI and release surfaces."
+---
+
 # Build, Test, and Cross-Compilation
 
 ytdl-mcp is a Rust project (edition 2021) with CI gates on fmt, clippy, and tests. Releases cross-compile Linux and Windows MSVC binaries.
@@ -25,13 +31,25 @@ Use `cargo-xwin` for Windows cross-builds from Linux:
 ```bash
 # Install toolchain (one-time)
 sudo apt-get install -y nasm llvm clang lld
-cargo install cargo-xwin --locked
 
 # Cross-build
 cargo xwin build --release --target x86_64-pc-windows-msvc
 ```
 
-**GOTCHA — the cargo wrapper.** `~/.local/bin/cargo` is a systemd-nspawn wrapper that breaks `cargo xwin` (manifests as `can't find crate for std`). For cross-compilation, invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
+On the GitHub Actions Linux CI workflow, cross-compilation installs a prebuilt `cargo-xwin` using `taiki-e/install-action` (avoids compiling edition-2024 deps through the soldr wrapper):
+
+```yaml
+uses: taiki-e/install-action@7572810d7dd469b651bb7793945692cf78da5dd7
+with:
+  tool: cargo-xwin
+```
+
+For local environments that have cargo wrapper scripts, the wrapper can break `cargo xwin`; invoke the real rustup cargo when needed:
+
+```bash
+~/.cargo/bin/cargo xwin build --release --target x86_64-pc-windows-msvc
+```
+
 
 ## Windows testing
 

@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "ytdl-mcp Quickstart"
+description: "Entry-point documentation for ytdl-mcp: tool surface, architecture links, setup paths, and operational workflows."
+---
+
 # ytdl-mcp Quickstart
 
 **ytdl-mcp** is a cross-platform, single-binary MCP (Model Context Protocol) server that downloads media from YouTube and other yt-dlp-supported sites, embeds metadata and cover art, organizes files by artist, and transfers results to an SSH remote.
