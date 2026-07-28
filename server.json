@@ -3,7 +3,7 @@
   "name": "ai.dinglebear/ytdl-rmcp",
   "title": "YTDL RMCP",
   "description": "Rust MCP server and CLI for yt-dlp search, downloads, metadata, transfers, and Plex playlists.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "websiteUrl": "https://github.com/jmagar/rytdl",
   "repository": {
     "url": "https://github.com/jmagar/rytdl",
@@ -25,7 +25,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "ytdl-rmcp",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "runtimeHint": "npx",
       "environmentVariables": [
         {
@@ -87,11 +87,11 @@
       "namespace": "ai.dinglebear",
       "dnsDomain": "dinglebear.ai",
       "distribution": {
-        "npm": "ytdl-rmcp@1.0.2",
+        "npm": "ytdl-rmcp@1.0.3",
         "nodePackage": "ytdl-rmcp"
       },
       "buildInfo": {
-        "version": "1.0.2",
+        "version": "1.0.3",
         "repository": "https://github.com/jmagar/rytdl"
       }
     }
