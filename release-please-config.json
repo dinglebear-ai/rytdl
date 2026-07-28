@@ -78,12 +78,17 @@
         {
           "type": "json",
           "path": "server.json",
-          "jsonpath": "$.packages[0].version"
+          "jsonpath": "$.packages[?(@.identifier == 'ytdl-rmcp')].version"
         },
         {
           "type": "json",
           "path": "server.json",
-          "jsonpath": "$._meta['io.modelcontextprotocol.registry/publisher-provided'].buildInfo.version"
+          "jsonpath": "$['_meta']['io.modelcontextprotocol.registry/publisher-provided'].distribution.npm"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$['_meta']['io.modelcontextprotocol.registry/publisher-provided'].buildInfo.version"
         }
       ]
     }
