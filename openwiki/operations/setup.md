@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Setup and Configuration"
+description: "Installation, configuration surface, packaging mapping, and CLI entry points for ytdl-mcp environments."
+---
+
 # Setup and Configuration
 
 ytdl-mcp can be installed as a bare binary, Claude Code plugin, Gemini extension, or MCP bundle. All modes read configuration from `YTDLP_*` (and `FFMPEG_*`/`FPCALC_*`) environment variables.

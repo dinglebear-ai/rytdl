@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Download Workflow"
+description: "End-to-end orchestration of youtube_download through tool dispatch, download, transfer targets, transfer queue, and history persistence."
+---
+
 # Download Workflow
 
 The `youtube_download` tool orchestrates the full media pipeline: resolve tools, download via yt-dlp, embed metadata, organize files, transfer to local/SSH/rclone targets, append history, and sync Plex playlists.

@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Architecture Overview"
+description: "Runtime architecture for ytdl-mcp: tool router, module boundaries, bootstrap, and security model for the Rust MCP server."
+---
+
 # Architecture Overview
 
 ytdl-mcp is a Rust-based MCP server built on the [`rmcp`](https://crates.io/crates/rmcp) crate, serving eight tools over stdio transport. All source files stay under 500 LOC where practical, with test files as siblings (`foo_tests.rs`).

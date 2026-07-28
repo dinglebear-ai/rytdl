@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Container Runtime"
+description: "How to run ytdl-mcp in Docker with shared state, SSH credentials, and helper binaries for transfer and identify workflows."
+---
+
 # Container Runtime
 
 The container image packages `ytdl-mcp` with ffmpeg, fpcalc, SSH, rsync, and CA certificates for production media-host batch jobs. The server still runs MCP over stdio by default.
