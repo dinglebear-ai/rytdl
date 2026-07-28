@@ -69,7 +69,27 @@
       "extra-files": [
         "packages/ytdl-rmcp/package.json",
         "gemini-extension.json",
-        "mcpb/manifest.json"
+        "mcpb/manifest.json",
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$.packages[?(@.identifier == 'ytdl-rmcp')].version"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$['_meta']['io.modelcontextprotocol.registry/publisher-provided'].distribution.npm"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$['_meta']['io.modelcontextprotocol.registry/publisher-provided'].buildInfo.version"
+        }
       ]
     }
   }
