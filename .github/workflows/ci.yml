@@ -35,6 +35,12 @@ jobs:
     runs-on: [self-hosted, unraid]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Fails when Cargo.toml, package.json, server.json and friends disagree
+      # on the version. Previously reachable only by hand, which is how a
+      # sibling repo sat seven releases out of sync unnoticed.
+      - name: Check version sync
+        run: bash scripts/check-version-sync.sh
       - name: Install packaging check tools
         run: |
           sudo apt-get update
