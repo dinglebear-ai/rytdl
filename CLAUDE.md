@@ -1,19 +1,39 @@
 # ytdl-rmcp — agent memory
 
 Cross-platform single-binary MCP server: downloads media with yt-dlp, embeds
-metadata + cover art, organizes by artist, and rsync/scp's to an SSH remote.
-Rust, built on the `rmcp` crate. yt-dlp + ffmpeg are auto-downloaded at runtime.
+metadata + cover art, organizes by artist, and transfers to a **local**, **SSH**,
+or **rclone** target. Also does AcoustID/MusicBrainz identification + retagging
+and optional Plex playlist sync. Rust on the `rmcp` crate; yt-dlp + ffmpeg are
+auto-downloaded at runtime.
 
 User-facing docs live in `README.md`. This file is for working **on** the repo.
 
-## Long-Lived Branches
+## Repo facts
 
-- `marketplace-no-mcp` is an intentional long-lived marketplace variant branch,
-  not stale cleanup. It keeps the ytdl-rmcp plugin/skill surface available while
-  removing bundled MCP server registration for environments where the server is
-  already connected through the Labby gateway.
-- Do not merge `marketplace-no-mcp` into `main` by default, and do not delete it
-  as stale unless Jacob explicitly retires the no-MCP marketplace variant.
+| Fact | Value |
+| --- | --- |
+| Remote | `git@github.com:dinglebear-ai/rytdl.git`, default branch `main` |
+| Layout | **Single crate — NOT a cargo workspace.** No `[workspace]`, no `crates/` dir |
+| Crate name | `ytdl-rmcp` (`Cargo.toml` `[package].name`) |
+| Binary | `rytdl` (`[[bin]]`, also `default-run`) |
+| Edition | **2021** — deliberate, see gotchas |
+| MCP crate | `rmcp = "2.2"`, `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
+| Transport | **stdio only. There is NO HTTP server and no service port.** `transport-io` is the only transport feature; nothing in `src/` binds a socket |
+| Lints | `[lints.clippy] all = "warn"`; CI gates with `clippy -D warnings` |
+
+Two deliberate divergences from the rest of the rmcp fleet:
+
+- **No port.** Unlike `rgotify` (40020), `runifi` (40030), etc., this server is
+  launched per-session over stdio by an MCP client. Do not invent a port for
+  docs, manifests, or the gateway config.
+- **No full CLI↔MCP parity.** The CLI is only `serve` / `setup` / `doctor`;
+  every media operation is MCP-tool-only. That is intentional — the binary is
+  distributed as a client-launched plugin, not an operator CLI.
+
+**Retired (2026-07-27):** the `marketplace-no-mcp` branch variant is gone —
+branch deleted locally and on the remote, protection policy removed. Older
+`docs/sessions/*.md` logs still describe it as a protected long-lived branch;
+those are historical records, and this file overrides them. Do not recreate it.
 
 ## Architecture (module layout)
 
@@ -21,21 +41,26 @@ User-facing docs live in `README.md`. This file is for working **on** the repo.
 
 | File | Role |
 | --- | --- |
-| `main.rs` | clap dispatch: bare → serve stdio, `setup` → installer, `doctor` → diagnostics; stderr tracing |
+| `main.rs` | clap dispatch: bare or `serve` → serve stdio, `setup` → installer, `doctor` → diagnostics; stderr tracing |
 | `config.rs` | `Config::from_env_result` — all `YTDLP_*` env vars (the panicking `from_env` is now `#[cfg(test)]`-only) |
 | `doctor.rs` | `ytdl-rmcp doctor` — read-only install/diagnostics probe: prints version/git-sha, platform, resolved tool paths, and redacted config presence |
 | `model.rs` | tool input structs + enums (serde + schemars); `Urls` accepts string or array |
-| `mcp.rs` | `rmcp` `ServerHandler` via `#[tool_router]`/`#[tool]`/`#[tool_handler]` — 6 tools (`youtube_download`, `youtube_probe`, `youtube_identify`, `youtube_search`, `youtube_stats`, `youtube_search_ui`) |
-| `service.rs` | orchestration: resolve tools → download → transfer → format payload |
+| `mcp.rs` | `rmcp` `ServerHandler` via `#[tool_router]`/`#[tool]`/`#[tool_handler]` — **8 tools**: `youtube_download`, `youtube_probe`, `youtube_identify`, `youtube_search`, `youtube_stats`, `youtube_plex_playlist`, `youtube_transfer_queue`, `youtube_search_ui` |
+| `service.rs` | orchestration: resolve tools → download → (retag) → transfer → (Plex) → ledger → format payload |
 | `service/format.rs` | render the response payload as JSON or Markdown per `ResponseFormat` |
+| `service/retag.rs` | in-place AcoustID/MusicBrainz retag of staged audio before transfer |
+| `service/plex_tracks.rs` | map transferred audio files onto Plex tracks for playlist adds |
 | `downloader.rs` | builds the yt-dlp argv, runs it, parses `--print` output; `fetch` (download) path |
 | `downloader/probe.rs` | `ProbeResult` + `probe`: metadata-only yt-dlp query (no media download) |
-| `transfer.rs` | rsync-or-scp, `ensure_remote_dir` |
+| `transfer.rs` | target parsing (`TargetPath::{Local,Ssh,Rclone}`) + dispatch: local → in-process Rust dir copy, SSH → rsync-or-scp + `ensure_remote_dir`, rclone → `rclone copy` |
+| `transfer_queue.rs` | retained-staging failure manifests; backs `youtube_transfer_queue` list/drain |
 | `history.rs` | persistent JSONL download ledger + `youtube_stats` aggregation derived from it |
+| `history/candidates.rs` | selects transferred-audio candidates from the ledger for Plex playlist builds |
 | `identify.rs` | AcoustID fingerprint (fpcalc) → MusicBrainz lookup → retag preview; backs `youtube_identify` |
 | `identify/musicbrainz.rs` | MusicBrainz REST client + `RetagPreview` scoring |
 | `identify/tagger.rs` | writes retag-preview tags into the audio file via `lofty` |
-| `plex.rs` | optional Plex playlist integration — match + add downloaded tracks |
+| `plex.rs` | optional Plex integration — search/match tracks, create playlists |
+| `plex/playlist.rs` | Plex playlist create/append REST calls |
 | `search_app.rs` | MCP-app HTML resource (`ui://…/youtube-search.html`) backing `youtube_search_ui` |
 | `bootstrap.rs` + `bootstrap/{ytdlp,ffmpeg,http}.rs` | resolve/install yt-dlp + ffmpeg into the cache dir |
 | `urls.rs` | YouTube mix/radio URL cleaning |
@@ -84,6 +109,13 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
   resolved executable bytes. This is hash pinning, not upstream signature
   verification; known-good binaries plus `YTDLP_PATH` / `FFMPEG_PATH` are the
   strictest supported mode.
+- **Local targets do NOT use rsync.** `transfer.rs` dispatches
+  `TargetPath::Local` to an in-process Rust directory copy
+  (`copy_dir_contents_blocking`, which also refuses a dest nested inside the
+  source). Only **SSH** targets shell out — rsync `-a --partial -s`
+  (`-s` == `--protect-args`) when `rsync` is on `PATH`, else `scp`. rclone
+  targets shell out to `rclone copy`. Local targets additionally require
+  `YTDLP_ALLOW_LOCAL_TARGETS=true`.
 - **Timeouts**: `YTDLP_TIMEOUT_SECS` defaults to 1800 and is enforced for
   yt-dlp download/probe commands. `YTDLP_TRANSFER_TIMEOUT_SECS` defaults to 600
   and is enforced around each transfer phase from `service.rs`.
@@ -109,15 +141,21 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
 
 ## Distribution
 
-- **GitHub**: `jmagar/rytdl`. Release CI in `.github/workflows/release.yml`
-  builds linux + windows-msvc and attaches to `v*` releases; `ci.yml` runs
-  fmt/clippy/test + a Windows cross-build smoke per push/PR.
+- **GitHub**: `dinglebear-ai/rytdl` (the old `jmagar/rytdl` path still resolves
+  via GitHub's transfer redirect). Workflows in `.github/workflows/`:
+  `ci.yml` (fmt/clippy/test + Windows cross-build smoke per push/PR),
+  `release.yml` (linux + windows-msvc binaries + the mcpb bundle on `v*`),
+  `release-please.yml`, `container.yml` (ghcr image on `main`), `audit.yml`,
+  `codeql.yml`, and `openwiki-update.yml`.
 - **npm launcher**: `packages/ytdl-rmcp` publishes `ytdl-rmcp` to npm. MCP clients
   should launch with `npx -y ytdl-rmcp`; the npm postinstall/lazy installer
   downloads the matching GitHub Release binary.
-- **Claude Code plugin**: root `.claude-plugin/`, `.mcp.json`, `hooks/`;
-  `.mcp.json` uses `npx -y ytdl-rmcp` plus plugin `userConfig` env mapping.
-  Registered in the `jmagar/lab` marketplace as `ytdl-rmcp`.
+- **Claude Code plugin**: root `.claude-plugin/plugin.json` + `.mcp.json` +
+  `skills/ytdl/`. `.mcp.json` uses `npx -y ytdl-rmcp` plus plugin `userConfig`
+  env mapping. **This plugin ships no hooks** — there is no `hooks/` dir and
+  `plugin.json` has no `hooks` key; do not reintroduce one.
+- **Container**: `Dockerfile` → `ghcr.io/dinglebear-ai/rytdl:main`, bundling
+  ffmpeg, fpcalc, openssh-client, rclone, and rsync. See `docs/container.md`.
 - **Gemini extension**: `gemini-extension.json` (settings → `YTDLP_*` env vars);
   prefer the npm launcher command for MCP stdio registration.
 - **MCP bundle**: `mcpb/manifest.json` (`server.type: "binary"`, manifest schema

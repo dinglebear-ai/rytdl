@@ -23,7 +23,6 @@ json_files=(
   ".claude-plugin/plugin.json"
   ".mcp.json"
   "gemini-extension.json"
-  "hooks/hooks.json"
   "mcpb/manifest.json"
 )
 
