@@ -9,7 +9,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: "0"
-  SOLDR_CACHE_DIR: ${{ github.workspace }}/../.soldr-cache
 
 jobs:
   check:
@@ -17,8 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install Rust + soldr
-        uses: ./.github/actions/setup-rust-soldr
+      - name: Install Rust and kache
+        uses: ./.github/actions/setup-rust-kache
         with:
           components: rustfmt, clippy
 
@@ -75,8 +74,8 @@ jobs:
     runs-on: [self-hosted, unraid]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Install Rust + soldr
-        uses: ./.github/actions/setup-rust-soldr
+      - name: Install Rust and kache
+        uses: ./.github/actions/setup-rust-kache
         with:
           targets: x86_64-pc-windows-msvc
       - name: Install cross toolchain
@@ -85,7 +84,7 @@ jobs:
           sudo apt-get install -y nasm llvm clang lld
       - name: Install cargo-xwin
         # Prebuilt binary — avoids compiling cargo-xwin's edition-2024 deps
-        # (getrandom, ring) from source through the soldr cargo/rustc wrapper,
+        # (getrandom, ring) from source through the kache cargo/rustc wrapper,
         # which fails on the self-hosted runner.
         uses: taiki-e/install-action@7572810d7dd469b651bb7793945692cf78da5dd7 # v2.85.0
         with:
