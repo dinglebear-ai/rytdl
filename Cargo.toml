@@ -2,7 +2,7 @@
 name = "ytdl-rmcp"
 version = "1.0.3"
 edition = "2024"
-rust-version = "1.92"
+rust-version = "1.97.1"
 categories = ["command-line-utilities", "development-tools"]
 keywords = ["mcp", "yt-dlp", "youtube", "media", "plex"]
 description = "Rust MCP server and CLI for yt-dlp media search, downloads, metadata tagging, transfer queues, and Plex playlists."

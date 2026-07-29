@@ -2,7 +2,7 @@
 
 # Base images pinned by digest (cd-m3). Re-resolve with:
 #   docker buildx imagetools inspect <image:tag>   (top-level "Digest:")
-FROM rust:1-bookworm@sha256:19817ead3289c8c631c73df281e18b59b172f6a31f4f563290f69cddd06c30e9 AS builder
+FROM rust:1-bookworm@sha256:77fac8b98f9f46062bb680b6d25d5bcaabfc400143952ebc572e924bcbedc3fa AS builder
 
 WORKDIR /app
 COPY Cargo.toml Cargo.lock build.rs ./
