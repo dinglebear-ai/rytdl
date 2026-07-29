@@ -1,7 +1,8 @@
 [package]
 name = "ytdl-rmcp"
 version = "1.0.3"
-edition = "2021"
+edition = "2024"
+rust-version = "1.92"
 categories = ["command-line-utilities", "development-tools"]
 keywords = ["mcp", "yt-dlp", "youtube", "media", "plex"]
 description = "Rust MCP server and CLI for yt-dlp media search, downloads, metadata tagging, transfer queues, and Plex playlists."
@@ -17,7 +18,7 @@ path = "src/main.rs"
 
 [dependencies]
 # MCP server (stdio transport)
-rmcp = { version = "2.2", default-features = false, features = [
+rmcp = { version = "=3.0.0-beta.2", default-features = false, features = [
   "server",
   "macros",
   "transport-io",
@@ -74,7 +75,8 @@ lofty = "0.24.0"
 # left at its default level rather than `forbid`, because util.rs has a small
 # `extern "C"` FFI `kill` declaration that requires `unsafe`.)
 [lints.clippy]
-all = "warn"
+all = { level = "warn", priority = -1 }
+mod_module_files = "deny"
 
 [profile.release]
 strip = true

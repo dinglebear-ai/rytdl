@@ -2,8 +2,8 @@ use anyhow::Result;
 use serde::Serialize;
 
 use super::{
-    dedup_tracks, find_track_rating_key, machine_identifier, PlaylistState, PlexMissingTrack,
-    PlexTrackInput, PlexTransport, TrackCandidate,
+    PlaylistState, PlexMissingTrack, PlexTrackInput, PlexTransport, TrackCandidate, dedup_tracks,
+    find_track_rating_key, machine_identifier,
 };
 use crate::config::Config;
 

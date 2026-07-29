@@ -1,7 +1,7 @@
 use rmcp::ServerHandler;
 
 use super::{
-    error_tool_result, json_text_tool_result, structured_tool_result, text_tool_result, YtdlServer,
+    YtdlServer, error_tool_result, json_text_tool_result, structured_tool_result, text_tool_result,
 };
 use crate::config::Config;
 

@@ -4,7 +4,7 @@ mod playlist;
 
 use std::collections::BTreeSet;
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use serde::Serialize;
 use serde_json::Value;
 use url::Url;
@@ -15,7 +15,7 @@ const TRACK_TYPE: &str = "10";
 
 #[allow(unused_imports)]
 pub use playlist::{
-    apply_audio_tracks, preview_audio_tracks, PlexPlaybackLinks, PlexPlaylistActionResult,
+    PlexPlaybackLinks, PlexPlaylistActionResult, apply_audio_tracks, preview_audio_tracks,
 };
 
 #[cfg(test)]

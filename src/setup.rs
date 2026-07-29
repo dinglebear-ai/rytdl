@@ -9,7 +9,7 @@
 use std::process::Command;
 
 use anyhow::{Context, Result};
-use dialoguer::{theme::ColorfulTheme, Input, MultiSelect};
+use dialoguer::{Input, MultiSelect, theme::ColorfulTheme};
 
 use crate::bootstrap;
 use crate::config::Config;

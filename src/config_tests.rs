@@ -7,6 +7,19 @@ fn env_lock() -> MutexGuard<'static, ()> {
     ENV_LOCK.get_or_init(|| Mutex::new(())).lock().unwrap()
 }
 
+/// Edition 2024 made `std::env::set_var`/`remove_var` `unsafe` because they are
+/// not thread-safe. Every caller in this module holds `env_lock()` first, and
+/// the tests here do not spawn threads that read the environment, so the
+/// safety obligation is discharged by that mutex.
+fn set_test_var(key: &str, value: &str) {
+    unsafe { std::env::set_var(key, value) }
+}
+
+/// See [`set_test_var`] for why this is sound.
+fn remove_test_var(key: &str) {
+    unsafe { std::env::remove_var(key) }
+}
+
 /// A Config with everything empty/default, for exercising pure methods without
 /// touching the process environment.
 fn blank() -> Config {
@@ -162,7 +175,7 @@ fn parse_ssh_opts_preserves_safe_options_and_defaults() {
 fn from_env_result_rejects_invalid_sha256_pins() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_SHA256", "not-a-sha");
+    set_test_var("YTDLP_SHA256", "not-a-sha");
 
     let err = Config::from_env_result().unwrap_err().to_string();
 
@@ -175,7 +188,7 @@ fn from_env_result_rejects_invalid_sha256_pins() {
 fn from_env_result_rejects_malformed_ssh_opts() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_SSH_OPTS", "-i '/tmp/missing end");
+    set_test_var("YTDLP_SSH_OPTS", "-i '/tmp/missing end");
 
     let err = Config::from_env_result().unwrap_err().to_string();
 
@@ -188,13 +201,13 @@ fn from_env_result_rejects_invalid_and_zero_timeouts() {
     let _guard = env_lock();
     clear_test_env();
 
-    std::env::set_var("YTDLP_TIMEOUT_SECS", "eventually");
+    set_test_var("YTDLP_TIMEOUT_SECS", "eventually");
     let err = Config::from_env_result().unwrap_err().to_string();
     assert!(err.contains("YTDLP_TIMEOUT_SECS"));
     assert!(err.contains("positive integer"));
 
-    std::env::set_var("YTDLP_TIMEOUT_SECS", "1");
-    std::env::set_var("YTDLP_TRANSFER_TIMEOUT_SECS", "0");
+    set_test_var("YTDLP_TIMEOUT_SECS", "1");
+    set_test_var("YTDLP_TRANSFER_TIMEOUT_SECS", "0");
     let err = Config::from_env_result().unwrap_err().to_string();
     assert!(err.contains("YTDLP_TRANSFER_TIMEOUT_SECS"));
     assert!(err.contains("greater than zero"));
@@ -206,24 +219,24 @@ fn from_env_result_rejects_invalid_and_zero_timeouts() {
 fn from_env_result_wires_runtime_env_values() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_TARGET_PATH", "media:/audio");
-    std::env::set_var("YTDLP_VIDEO_TARGET_PATH", "media:/video");
-    std::env::set_var("YTDLP_ALLOW_LOCAL_TARGETS", "true");
-    std::env::set_var("YTDLP_AUDIO_FORMAT", "opus");
-    std::env::set_var("YTDLP_SSH_OPTS", "-i '/home/me/media key' -p 2222");
-    std::env::set_var("YTDLP_HISTORY_PATH", "/tmp/ytdl-history.jsonl");
-    std::env::set_var("YTDLP_PLEX_URL", "http://plex.local:32400");
-    std::env::set_var("YTDLP_PLEX_TOKEN", "plex-token");
-    std::env::set_var("YTDLP_PLEX_PLAYLIST", "Downloads");
-    std::env::set_var("YTDLP_ACOUSTID_CLIENT_KEY", "acoustid-key");
-    std::env::set_var("FPCALC_PATH", "/opt/bin/fpcalc");
-    std::env::set_var("YTDLP_MUSICBRAINZ_CONTACT", "https://example.test/contact");
-    std::env::set_var(
+    set_test_var("YTDLP_TARGET_PATH", "media:/audio");
+    set_test_var("YTDLP_VIDEO_TARGET_PATH", "media:/video");
+    set_test_var("YTDLP_ALLOW_LOCAL_TARGETS", "true");
+    set_test_var("YTDLP_AUDIO_FORMAT", "opus");
+    set_test_var("YTDLP_SSH_OPTS", "-i '/home/me/media key' -p 2222");
+    set_test_var("YTDLP_HISTORY_PATH", "/tmp/ytdl-history.jsonl");
+    set_test_var("YTDLP_PLEX_URL", "http://plex.local:32400");
+    set_test_var("YTDLP_PLEX_TOKEN", "plex-token");
+    set_test_var("YTDLP_PLEX_PLAYLIST", "Downloads");
+    set_test_var("YTDLP_ACOUSTID_CLIENT_KEY", "acoustid-key");
+    set_test_var("FPCALC_PATH", "/opt/bin/fpcalc");
+    set_test_var("YTDLP_MUSICBRAINZ_CONTACT", "https://example.test/contact");
+    set_test_var(
         "YTDLP_SHA256",
         "ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789",
     );
-    std::env::set_var("YTDLP_TIMEOUT_SECS", "77");
-    std::env::set_var("YTDLP_TRANSFER_TIMEOUT_SECS", "88");
+    set_test_var("YTDLP_TIMEOUT_SECS", "77");
+    set_test_var("YTDLP_TRANSFER_TIMEOUT_SECS", "88");
 
     let cfg = Config::from_env_result().unwrap();
 
@@ -257,9 +270,9 @@ fn from_env_result_wires_runtime_env_values() {
 fn from_env_result_composes_legacy_ssh_targets_explicitly() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_REMOTE", "nas");
-    std::env::set_var("YTDLP_REMOTE_PATH", "/music");
-    std::env::set_var("YTDLP_VIDEO_REMOTE_PATH", "/videos");
+    set_test_var("YTDLP_REMOTE", "nas");
+    set_test_var("YTDLP_REMOTE_PATH", "/music");
+    set_test_var("YTDLP_VIDEO_REMOTE_PATH", "/videos");
 
     let cfg = Config::from_env_result().unwrap();
 
@@ -272,7 +285,7 @@ fn from_env_result_composes_legacy_ssh_targets_explicitly() {
 fn from_env_strips_dangerous_ssh_opts_end_to_end() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var(
+    set_test_var(
         "YTDLP_SSH_OPTS",
         "-o ProxyCommand=evil -oPermitLocalCommand=yes -o ConnectTimeout=10 -p 2222",
     );
@@ -289,8 +302,8 @@ fn from_env_strips_dangerous_ssh_opts_end_to_end() {
 fn from_env_result_defaults_plex_playlist_when_plex_is_configured() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_PLEX_URL", "http://plex.local:32400");
-    std::env::set_var("YTDLP_PLEX_TOKEN", "plex-token");
+    set_test_var("YTDLP_PLEX_URL", "http://plex.local:32400");
+    set_test_var("YTDLP_PLEX_TOKEN", "plex-token");
 
     let cfg = Config::from_env_result().unwrap();
 
@@ -302,7 +315,7 @@ fn from_env_result_defaults_plex_playlist_when_plex_is_configured() {
 fn from_env_result_can_disable_metadata_cleanup() {
     let _guard = env_lock();
     clear_test_env();
-    std::env::set_var("YTDLP_CLEAN_METADATA", "0");
+    set_test_var("YTDLP_CLEAN_METADATA", "0");
 
     let cfg = Config::from_env_result().unwrap();
 
@@ -333,6 +346,6 @@ fn clear_test_env() {
         "YTDLP_TIMEOUT_SECS",
         "YTDLP_TRANSFER_TIMEOUT_SECS",
     ] {
-        std::env::remove_var(key);
+        remove_test_var(key);
     }
 }

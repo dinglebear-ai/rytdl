@@ -41,9 +41,10 @@ fn registration_envs_omit_blank_video_destination() {
 fn registration_envs_enable_local_targets_when_prompt_uses_local_path() {
     let envs = registration_envs("/media/music".into(), "   ".into());
 
-    assert!(envs
-        .iter()
-        .any(|(key, value)| key == "YTDLP_ALLOW_LOCAL_TARGETS" && value == "true"));
+    assert!(
+        envs.iter()
+            .any(|(key, value)| key == "YTDLP_ALLOW_LOCAL_TARGETS" && value == "true")
+    );
 }
 
 #[test]

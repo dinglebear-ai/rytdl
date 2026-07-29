@@ -8,7 +8,7 @@ mod format;
 mod plex_tracks;
 mod retag;
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 #[cfg(not(windows))]
 use std::path::Path;
 use std::path::PathBuf;
@@ -39,7 +39,7 @@ use retag::auto_retag_audio;
 pub(crate) use format::DownloadPayload;
 #[cfg(test)]
 pub(crate) use format::{
-    download_payload, render_download_markdown, DownloadFile, DownloadItem, DownloadStatus,
+    DownloadFile, DownloadItem, DownloadStatus, download_payload, render_download_markdown,
 };
 
 #[cfg(test)]
@@ -286,39 +286,37 @@ pub async fn run_download(
         None
     };
 
-    if !transferred {
-        if let Some(kept) = staging_kept.as_deref() {
-            let queue_input = crate::transfer_queue::TransferFailureManifestInput {
-                staging_path: kept.to_path_buf(),
-                targets: transfer_dests
-                    .iter()
-                    .map(|(kind, target)| ((*kind).to_string(), target.display().to_string()))
-                    .collect(),
-                files: results
-                    .iter()
-                    .flat_map(|item| item.files.iter())
-                    .filter_map(|file| {
-                        file.path
-                            .strip_prefix(&staging_path)
-                            .ok()
-                            .map(PathBuf::from)
-                    })
-                    .collect(),
-                last_error: transfer_error
-                    .clone()
-                    .unwrap_or_else(|| "transfer failed".to_string()),
-            };
-            let cfg = Arc::clone(cfg);
-            let record_result = tokio::task::spawn_blocking(move || {
-                crate::transfer_queue::record_failed_transfer(&cfg, queue_input)
-            })
-            .await;
-            if let Err(error) = record_result
-                .map_err(anyhow::Error::from)
-                .and_then(|result| result)
-            {
-                tracing::warn!(%error, "failed to record transfer queue manifest");
-            }
+    if !transferred && let Some(kept) = staging_kept.as_deref() {
+        let queue_input = crate::transfer_queue::TransferFailureManifestInput {
+            staging_path: kept.to_path_buf(),
+            targets: transfer_dests
+                .iter()
+                .map(|(kind, target)| ((*kind).to_string(), target.display().to_string()))
+                .collect(),
+            files: results
+                .iter()
+                .flat_map(|item| item.files.iter())
+                .filter_map(|file| {
+                    file.path
+                        .strip_prefix(&staging_path)
+                        .ok()
+                        .map(PathBuf::from)
+                })
+                .collect(),
+            last_error: transfer_error
+                .clone()
+                .unwrap_or_else(|| "transfer failed".to_string()),
+        };
+        let cfg = Arc::clone(cfg);
+        let record_result = tokio::task::spawn_blocking(move || {
+            crate::transfer_queue::record_failed_transfer(&cfg, queue_input)
+        })
+        .await;
+        if let Err(error) = record_result
+            .map_err(anyhow::Error::from)
+            .and_then(|result| result)
+        {
+            tracing::warn!(%error, "failed to record transfer queue manifest");
         }
     }
 
@@ -795,14 +793,14 @@ fn render_plex_playlist_markdown(value: &serde_json::Value) -> String {
     let mut lines = vec![format!(
         "{playlist}: {matched} matched, {added} added, {already} already present."
     )];
-    if let Some(missing) = value["missing"].as_array() {
-        if !missing.is_empty() {
-            lines.push("Missing tracks:".to_string());
-            for track in missing {
-                let title = track["title"].as_str().unwrap_or("unknown title");
-                let uploader = track["uploader"].as_str().unwrap_or("unknown uploader");
-                lines.push(format!("- {title} ({uploader})"));
-            }
+    if let Some(missing) = value["missing"].as_array()
+        && !missing.is_empty()
+    {
+        lines.push("Missing tracks:".to_string());
+        for track in missing {
+            let title = track["title"].as_str().unwrap_or("unknown title");
+            let uploader = track["uploader"].as_str().unwrap_or("unknown uploader");
+            lines.push(format!("- {title} ({uploader})"));
         }
     }
     push_string_array_details(&mut lines, "Errors", &value["errors"]);

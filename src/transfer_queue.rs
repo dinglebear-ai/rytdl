@@ -7,7 +7,7 @@ use std::fs::{self, File, OpenOptions};
 use std::io::Write;
 use std::path::{Component, Path, PathBuf};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use chrono::{SecondsFormat, Utc};
 use fs2::FileExt;
 use serde::{Deserialize, Serialize};
@@ -267,14 +267,13 @@ fn split_whitespace_preserving(value: &str) -> Vec<(bool, String)> {
 // auth material in SSH/rsync/rclone/HTTP errors.
 fn redact_error_token(token: &str) -> String {
     let lower = token.to_ascii_lowercase();
-    if lower.starts_with("http://") || lower.starts_with("https://") {
-        if let Ok(mut url) = url::Url::parse(token.trim_matches(['\'', '"', ',', ';'])) {
-            if !url.username().is_empty() || url.password().is_some() {
-                let _ = url.set_username("REDACTED");
-                let _ = url.set_password(None);
-                return url.to_string();
-            }
-        }
+    if (lower.starts_with("http://") || lower.starts_with("https://"))
+        && let Ok(mut url) = url::Url::parse(token.trim_matches(['\'', '"', ',', ';']))
+        && (!url.username().is_empty() || url.password().is_some())
+    {
+        let _ = url.set_username("REDACTED");
+        let _ = url.set_password(None);
+        return url.to_string();
     }
     for marker in [
         "token=",
@@ -383,7 +382,9 @@ fn validate_staged_files(entry: &TransferQueueEntry, staging_path: &Path) -> Res
     if recorded != actual {
         let missing = path_set_preview(recorded.difference(&actual));
         let extra = path_set_preview(actual.difference(&recorded));
-        bail!("staged files no longer match transfer queue manifest: missing=[{missing}], extra=[{extra}]");
+        bail!(
+            "staged files no longer match transfer queue manifest: missing=[{missing}], extra=[{extra}]"
+        );
     }
     Ok(())
 }

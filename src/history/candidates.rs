@@ -8,7 +8,7 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 
 use crate::config::Config;
-use crate::history::{history_path, HistoryLock};
+use crate::history::{HistoryLock, history_path};
 
 #[derive(Debug, Clone, Serialize, Deserialize, schemars::JsonSchema, PartialEq)]
 pub(crate) struct PlaylistCandidatesPayload {

@@ -162,11 +162,13 @@ fn apply_playlist_returns_best_effort_plexamp_link() {
         result.playback_link_status.as_deref(),
         Some("generated_unverified")
     );
-    assert!(result
-        .plexamp_url
-        .as_deref()
-        .unwrap()
-        .starts_with("https://listen.plex.tv/player/playback/playMedia?uri="));
+    assert!(
+        result
+            .plexamp_url
+            .as_deref()
+            .unwrap()
+            .starts_with("https://listen.plex.tv/player/playback/playMedia?uri=")
+    );
     assert!(!result.plexamp_url.unwrap().contains("X-Plex-Token"));
 }
 
@@ -465,9 +467,11 @@ fn playback_links_use_path_component_percent_encoding() {
     assert!(links.plexamp_url.contains("playlist%201"));
     assert!(!links.plexamp_url.contains('+'));
     assert!(links.plex_web_url.contains("machine%20id"));
-    assert!(links
-        .plex_web_url
-        .contains("%2Fplaylists%2Fplaylist%201%2Fitems"));
+    assert!(
+        links
+            .plex_web_url
+            .contains("%2Fplaylists%2Fplaylist%201%2Fitems")
+    );
 }
 
 #[test]

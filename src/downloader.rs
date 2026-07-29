@@ -7,12 +7,12 @@
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use tokio::process::Command;
 
 use crate::bootstrap::Tools;
 use crate::model::{AudioFormat, DownloadMode, SearchResultItem, VideoContainer};
-use crate::util::{command_error, is_http_url, json_str, run_capped, CommandOutput};
+use crate::util::{CommandOutput, command_error, is_http_url, json_str, run_capped};
 // Re-exported for `downloader_tests.rs`, which exercises the shared
 // tail-truncation logic via this module's `super::*` glob.
 #[cfg(test)]
@@ -20,7 +20,7 @@ pub(crate) use crate::util::stderr_tail_text;
 
 mod probe;
 
-pub use probe::{probe, ProbeResult};
+pub use probe::{ProbeResult, probe};
 
 /// Field separator embedded in the `--print` template (unit separator, unlikely
 /// to appear in titles).

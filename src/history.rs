@@ -9,7 +9,7 @@ mod candidates;
 use anyhow::{Context, Result};
 use chrono::{SecondsFormat, Utc};
 use fs2::FileExt;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::ffi::OsString;
 use std::fs::OpenOptions;
@@ -200,7 +200,7 @@ fn rotate_if_needed(path: &std::path::Path) -> Result<()> {
         Ok(file) => file,
         Err(error) if error.kind() == ErrorKind::NotFound => return Ok(()),
         Err(error) => {
-            return Err(error).with_context(|| format!("open history file {}", path.display()))
+            return Err(error).with_context(|| format!("open history file {}", path.display()));
         }
     };
 
@@ -315,7 +315,7 @@ pub(crate) fn stats_payload(cfg: &Config, limit: usize) -> Result<Value> {
         Ok(file) => Some(file),
         Err(error) if error.kind() == ErrorKind::NotFound => None,
         Err(error) => {
-            return Err(error).with_context(|| format!("open history file {}", path.display()))
+            return Err(error).with_context(|| format!("open history file {}", path.display()));
         }
     };
 

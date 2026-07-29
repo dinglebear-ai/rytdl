@@ -1,7 +1,7 @@
 use std::io::Write;
 use std::path::Path;
 
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 use super::*;
 use crate::config::Config;

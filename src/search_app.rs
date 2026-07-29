@@ -18,14 +18,12 @@ const EXTERNAL_LINK_DOMAINS: [&str; 4] = [
 ];
 
 pub fn list_app_resources() -> ListResourcesResult {
-    ListResourcesResult {
-        resources: vec![Resource::new(RESOURCE_URI, "youtube-search")
+    ListResourcesResult::with_all_items(vec![
+        Resource::new(RESOURCE_URI, "youtube-search")
             .with_title("YouTube search")
             .with_description("Search YouTube and send results to ytdl-rmcp actions.")
-            .with_mime_type(RESOURCE_MIME_TYPE)],
-        next_cursor: None,
-        meta: None,
-    }
+            .with_mime_type(RESOURCE_MIME_TYPE),
+    ])
 }
 
 pub fn read_app_resource(uri: &str) -> Option<ReadResourceResult> {
@@ -33,12 +31,11 @@ pub fn read_app_resource(uri: &str) -> Option<ReadResourceResult> {
         return None;
     }
     let meta = resource_meta();
-    Some(ReadResourceResult::new(vec![ResourceContents::text(
-        html(),
-        RESOURCE_URI,
-    )
-    .with_mime_type(RESOURCE_MIME_TYPE)
-    .with_meta(meta)]))
+    Some(ReadResourceResult::new(vec![
+        ResourceContents::text(html(), RESOURCE_URI)
+            .with_mime_type(RESOURCE_MIME_TYPE)
+            .with_meta(meta),
+    ]))
 }
 
 pub fn resource_meta() -> Meta {

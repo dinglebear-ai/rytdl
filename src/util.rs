@@ -4,7 +4,7 @@
 use std::process::{ExitStatus, Stdio};
 use std::time::Duration;
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use serde_json::Value;
 use tokio::io::AsyncReadExt;
 use tokio::process::{Child, Command};
@@ -225,7 +225,7 @@ async fn kill_process_group(child: &mut Child) {
 }
 
 #[cfg(unix)]
-extern "C" {
+unsafe extern "C" {
     /// `kill(2)` from the C library. A negative `pid` targets a process group.
     #[link_name = "kill"]
     fn libc_kill(pid: i32, sig: i32) -> i32;

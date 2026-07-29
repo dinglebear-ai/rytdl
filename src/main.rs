@@ -23,7 +23,7 @@ mod util;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use rmcp::{transport::stdio, ServiceExt};
+use rmcp::{ServiceExt, transport::stdio};
 
 use crate::config::Config;
 use crate::mcp::YtdlServer;
@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
 }
 
 fn init_tracing() {
-    use tracing_subscriber::{fmt, EnvFilter};
+    use tracing_subscriber::{EnvFilter, fmt};
     let filter = EnvFilter::try_from_env("YTDLP_LOG").unwrap_or_else(|_| EnvFilter::new("info"));
     fmt()
         .with_env_filter(filter)

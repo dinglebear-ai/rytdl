@@ -6,9 +6,9 @@ use rmcp::handler::server::router::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{
     CallToolResult, ContentBlock, Implementation, ListResourcesResult, PaginatedRequestParams,
-    ReadResourceRequestParams, ReadResourceResult, ServerCapabilities, ServerInfo,
+    ReadResourceRequestParams, ReadResourceResponse, ServerCapabilities, ServerInfo,
 };
-use rmcp::{tool, tool_handler, tool_router, ErrorData, RoleServer, ServerHandler};
+use rmcp::{ErrorData, RoleServer, ServerHandler, tool, tool_handler, tool_router};
 
 use crate::config::Config;
 use crate::model::{
@@ -385,9 +385,17 @@ impl ServerHandler for YtdlServer {
         &self,
         request: ReadResourceRequestParams,
         _context: rmcp::service::RequestContext<RoleServer>,
-    ) -> impl std::future::Future<Output = Result<ReadResourceResult, ErrorData>> + Send + '_ {
-        std::future::ready(search_app::read_app_resource(&request.uri).ok_or_else(|| {
-            ErrorData::invalid_params(format!("Unknown resource URI: {}", request.uri), None)
-        }))
+    ) -> impl std::future::Future<Output = Result<ReadResourceResponse, ErrorData>> + Send + '_
+    {
+        std::future::ready(
+            search_app::read_app_resource(&request.uri)
+                .map(Into::into)
+                .ok_or_else(|| {
+                    ErrorData::invalid_params(
+                        format!("Unknown resource URI: {}", request.uri),
+                        None,
+                    )
+                }),
+        )
     }
 }

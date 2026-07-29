@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 
 /// Download `url` to `dest` atomically (via a temp file + rename). Follows
 /// redirects (GitHub release `latest/download` links redirect to the asset).

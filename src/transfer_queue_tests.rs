@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
 use crate::transfer_queue::{
-    list_queue, prune_missing, record_failed_transfer, redact_transfer_error, retry_all, retry_one,
-    TransferFailureManifestInput,
+    TransferFailureManifestInput, list_queue, prune_missing, record_failed_transfer,
+    redact_transfer_error, retry_all, retry_one,
 };
 
 fn test_config() -> crate::config::Config {
@@ -161,11 +161,13 @@ async fn retry_missing_staging_marks_manifest_pending_not_running() {
     assert_eq!(result.failed, 1);
     assert_eq!(queued.status, "pending");
     assert_eq!(queued.attempts, 1);
-    assert!(queued
-        .last_error
-        .as_deref()
-        .unwrap()
-        .contains("staging directory no longer exists"));
+    assert!(
+        queued
+            .last_error
+            .as_deref()
+            .unwrap()
+            .contains("staging directory no longer exists")
+    );
 }
 
 #[tokio::test]
@@ -196,11 +198,13 @@ async fn retry_rejects_staging_tree_that_differs_from_manifest_files() {
     assert!(result.errors[0].contains("staged files no longer match"));
     assert_eq!(queued.status, "pending");
     assert_eq!(queued.attempts, 1);
-    assert!(queued
-        .last_error
-        .as_deref()
-        .unwrap()
-        .contains("extra=[audio/Artist/Surprise.mp3]"));
+    assert!(
+        queued
+            .last_error
+            .as_deref()
+            .unwrap()
+            .contains("extra=[audio/Artist/Surprise.mp3]")
+    );
 }
 
 #[tokio::test]
@@ -278,11 +282,13 @@ async fn retry_all_reports_mixed_success_and_failure() {
     assert_eq!(result.failed, 1, "{result:?}");
     assert!(!good.manifest_path.exists());
     assert!(bad.manifest_path.exists());
-    assert!(list_queue(&cfg)
-        .unwrap()
-        .entries
-        .iter()
-        .any(|entry| entry.manifest_id == bad.manifest_id));
+    assert!(
+        list_queue(&cfg)
+            .unwrap()
+            .entries
+            .iter()
+            .any(|entry| entry.manifest_id == bad.manifest_id)
+    );
 }
 
 fn find_file_named(root: &std::path::Path, name: &str) -> Option<PathBuf> {

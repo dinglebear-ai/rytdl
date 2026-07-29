@@ -210,10 +210,12 @@ async fn run_download_json_reports_history_error_without_failing_download() {
 
     assert_eq!(payload["transferred"], true);
     assert_eq!(payload["total_files"], 1);
-    assert!(payload["history_error"]
-        .as_str()
-        .unwrap()
-        .contains("create history directory"));
+    assert!(
+        payload["history_error"]
+            .as_str()
+            .unwrap()
+            .contains("create history directory")
+    );
 }
 
 #[tokio::test]
@@ -694,7 +696,10 @@ impl PathOverride {
             path_entries.extend(std::env::split_paths(old_path));
         }
 
-        std::env::set_var("PATH", std::env::join_paths(path_entries).unwrap());
+        // SAFETY: edition 2024 marks `set_var` unsafe because it is not
+        // thread-safe. These tests are single-threaded around PATH mutation —
+        // the override is installed and dropped within one test body.
+        unsafe { std::env::set_var("PATH", std::env::join_paths(path_entries).unwrap()) };
 
         Self { old_path }
     }
@@ -702,10 +707,11 @@ impl PathOverride {
 
 impl Drop for PathOverride {
     fn drop(&mut self) {
+        // SAFETY: see `PathOverride::prepend`.
         if let Some(old_path) = self.old_path.take() {
-            std::env::set_var("PATH", old_path);
+            unsafe { std::env::set_var("PATH", old_path) };
         } else {
-            std::env::remove_var("PATH");
+            unsafe { std::env::remove_var("PATH") };
         }
     }
 }

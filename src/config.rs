@@ -6,7 +6,7 @@
 
 use std::time::Duration;
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 
 /// Default ssh options: fail fast instead of hanging on a prompt. A stdio MCP
 /// server has no TTY, so an interactive prompt would block the call forever.
@@ -184,15 +184,15 @@ fn strip_dangerous_ssh_opts(tokens: Vec<String>) -> Vec<String> {
     while let Some(token) = iter.next() {
         if token == "-o" {
             // Split form: `-o` followed by `KEY=VALUE` in the next token.
-            if let Some(value) = iter.peek() {
-                if is_dangerous_ssh_opt_value(value) {
-                    tracing::warn!(
-                        option = %value,
-                        "dropping dangerous ssh option from YTDLP_SSH_OPTS (enables command execution)"
-                    );
-                    iter.next(); // consume the value too
-                    continue;
-                }
+            if let Some(value) = iter.peek()
+                && is_dangerous_ssh_opt_value(value)
+            {
+                tracing::warn!(
+                    option = %value,
+                    "dropping dangerous ssh option from YTDLP_SSH_OPTS (enables command execution)"
+                );
+                iter.next(); // consume the value too
+                continue;
             }
             out.push(token);
         } else if let Some(value) = token.strip_prefix("-o") {

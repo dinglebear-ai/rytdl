@@ -59,12 +59,16 @@ fn urls_into_validated_vec_rejects_non_http_and_flaglike_values() {
     assert!(err.contains("only http:// and https://"));
 
     // Non-http(s) schemes are rejected too.
-    assert!(Urls(OneOrMany::One("file:///etc/passwd".into()))
-        .into_validated_vec()
-        .is_err());
-    assert!(Urls(OneOrMany::One("-o/tmp/x".into()))
-        .into_validated_vec()
-        .is_err());
+    assert!(
+        Urls(OneOrMany::One("file:///etc/passwd".into()))
+            .into_validated_vec()
+            .is_err()
+    );
+    assert!(
+        Urls(OneOrMany::One("-o/tmp/x".into()))
+            .into_validated_vec()
+            .is_err()
+    );
 
     // One bad entry in a list fails the whole batch.
     let mixed: Urls = serde_json::from_str(r#"["https://ok.example/v","--exec=bad"]"#).unwrap();
