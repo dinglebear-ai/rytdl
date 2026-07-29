@@ -17,7 +17,7 @@ User-facing docs live in `README.md`. This file is for working **on** the repo.
 | Crate name | `ytdl-rmcp` (`Cargo.toml` `[package].name`) |
 | Binary | `rytdl` (`[[bin]]`, also `default-run`) |
 | Edition | **2021** — deliberate, see gotchas |
-| MCP crate | `rmcp = "2.2"`, `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
+| MCP crate | `rmcp = "=3.0.0-beta.2"` (exact pin), `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
 | Transport | **stdio only. There is NO HTTP server and no service port.** `transport-io` is the only transport feature; nothing in `src/` binds a socket |
 | Lints | `[lints.clippy] all = "warn"`; CI gates with `clippy -D warnings` |
 
