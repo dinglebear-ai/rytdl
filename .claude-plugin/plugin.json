@@ -1,9 +1,13 @@
 {
   "name": "ytdl-rmcp",
-  "description": "Download audio/video with yt-dlp (Rust binary), embed metadata + cover art, organize by artist, and transfer to local, SSH, or rclone targets.",
+  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "author": {
-    "name": "Jacob Magar"
+    "name": "dinglebear.ai",
+    "email": "hello@dinglebear.ai",
+    "url": "https://dinglebear.ai"
   },
+  "homepage": "https://rytdl.dinglebear.ai",
+  "repository": "https://github.com/dinglebear-ai/rytdl",
   "license": "MIT",
   "keywords": [
     "yt-dlp",

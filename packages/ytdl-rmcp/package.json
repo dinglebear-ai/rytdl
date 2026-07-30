@@ -1,11 +1,11 @@
 {
   "name": "ytdl-rmcp",
   "version": "1.0.3",
-  "description": "Node launcher for the ytdl-rmcp Rust MCP server and rytdl CLI for yt-dlp media workflows.",
+  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jmagar/rytdl.git",
+    "url": "git+https://github.com/dinglebear-ai/rytdl.git",
     "directory": "packages/ytdl-rmcp"
   },
   "bin": {
@@ -30,9 +30,9 @@
   "engines": {
     "node": ">=18"
   },
-  "homepage": "https://github.com/jmagar/rytdl#readme",
+  "homepage": "https://rytdl.dinglebear.ai",
   "bugs": {
-    "url": "https://github.com/jmagar/rytdl/issues"
+    "url": "https://github.com/dinglebear-ai/rytdl/issues"
   },
   "keywords": [
     "mcp",

@@ -13,13 +13,13 @@ User-facing docs live in `README.md`. This file is for working **on** the repo.
 | Fact | Value |
 | --- | --- |
 | Remote | `git@github.com:dinglebear-ai/rytdl.git`, default branch `main` |
-| Layout | **Single crate — NOT a cargo workspace.** No `[workspace]`, no `crates/` dir |
+| Layout | Single-crate Cargo workspace (`members = ["."]`); no `crates/` dir |
 | Crate name | `ytdl-rmcp` (`Cargo.toml` `[package].name`) |
 | Binary | `rytdl` (`[[bin]]`, also `default-run`) |
-| Edition | **2021** — deliberate, see gotchas |
-| MCP crate | `rmcp = "2.2"`, `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
+| Edition / MSRV | 2024 / Rust 1.97.1 |
+| MCP crate | `rmcp = "=3.0.0-beta.2"`, `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
 | Transport | **stdio only. There is NO HTTP server and no service port.** `transport-io` is the only transport feature; nothing in `src/` binds a socket |
-| Lints | `[lints.clippy] all = "warn"`; CI gates with `clippy -D warnings` |
+| Lints | Workspace Clippy + rustdoc Phase-0 policy; CI gates with `clippy -D warnings` |
 
 Two deliberate divergences from the rest of the rmcp fleet:
 
@@ -119,10 +119,8 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
 - **Timeouts**: `YTDLP_TIMEOUT_SECS` defaults to 1800 and is enforced for
   yt-dlp download/probe commands. `YTDLP_TRANSFER_TIMEOUT_SECS` defaults to 600
   and is enforced around each transfer phase from `service.rs`.
-- **Rust edition 2021 is intentional for now**: this is a distributable
-  single-binary MCP/plugin that is cross-built for Linux and Windows MSVC. Do not
-  migrate to edition 2024 unless Linux checks, Windows xwin build, and plugin
-  startup are all verified together.
+- **Edition 2024 is fleet policy.** Keep Linux checks, the Windows x64 cross-build,
+  and plugin startup verification together when changing build or packaging code.
 - **`--windows-filenames` is always on** so the `Artist/Title [id]` layout is
   identical across OSes. Side effect: a trailing `.` in a name (e.g. "Disney Jr.")
   becomes "Disney Jr.#".
@@ -141,8 +139,7 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
 
 ## Distribution
 
-- **GitHub**: `dinglebear-ai/rytdl` (the old `jmagar/rytdl` path still resolves
-  via GitHub's transfer redirect). Workflows in `.github/workflows/`:
+- **GitHub**: `dinglebear-ai/rytdl`. Workflows in `.github/workflows/`:
   `ci.yml` (fmt/clippy/test + Windows cross-build smoke per push/PR),
   `release.yml` (linux + windows-msvc binaries + the mcpb bundle on `v*`),
   `release-please.yml`, `container.yml` (ghcr image on `main`), `audit.yml`,

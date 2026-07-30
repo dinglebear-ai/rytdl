@@ -1,14 +1,55 @@
-[package]
-name = "ytdl-rmcp"
+[workspace]
+members = ["."]
+resolver = "2"
+
+[workspace.package]
 version = "1.0.3"
 edition = "2024"
 rust-version = "1.97.1"
-categories = ["command-line-utilities", "development-tools"]
-keywords = ["mcp", "yt-dlp", "youtube", "media", "plex"]
-description = "Rust MCP server and CLI for yt-dlp media search, downloads, metadata tagging, transfer queues, and Plex playlists."
+authors = ["dinglebear.ai <hello@dinglebear.ai>"]
 license = "MIT"
-homepage = "https://github.com/jmagar/rytdl#readme"
-repository = "https://github.com/jmagar/rytdl"
+readme = "README.md"
+homepage = "https://rytdl.dinglebear.ai"
+repository = "https://github.com/dinglebear-ai/rytdl"
+description = "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex."
+
+[workspace.dependencies]
+rmcp = { version = "=3.0.0-beta.2", default-features = false }
+schemars = "=1.2.1"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+missing_safety_doc = "deny"
+mod_module_files = "deny"
+
+[workspace.lints.rust]
+missing_crate_level_docs = "deny"
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.rustdoc]
+broken_intra_doc_links = "deny"
+invalid_codeblock_attributes = "deny"
+invalid_rust_codeblocks = "deny"
+private_intra_doc_links = "warn"
+bare_urls = "warn"
+redundant_explicit_links = "warn"
+unescaped_backticks = "warn"
+invalid_html_tags = "deny"
+
+[package]
+name = "ytdl-rmcp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+publish = false
+categories = ["command-line-utilities", "multimedia", "multimedia::video", "multimedia::audio", "api-bindings"]
+keywords = ["mcp", "yt-dlp", "youtube", "media", "plex"]
+description.workspace = true
 default-run = "rytdl"
 build = "build.rs"
 
@@ -18,7 +59,7 @@ path = "src/main.rs"
 
 [dependencies]
 # MCP server (stdio transport)
-rmcp = { version = "=3.0.0-beta.2", default-features = false, features = [
+rmcp = { workspace = true, features = [
   "server",
   "macros",
   "transport-io",
@@ -40,7 +81,7 @@ tokio = { version = "1", features = [
 # Serialization / schemas
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-schemars = "1"
+schemars.workspace = true
 
 # CLI dispatch (serve | setup)
 clap = { version = "4", features = ["derive"] }
@@ -68,15 +109,13 @@ sha2 = "0.11"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
 lofty = "0.24.0"
 
-# Central lint policy. Conservative on purpose: CI gates on `clippy -D warnings`,
-# so these must not turn currently-clean code into errors. `clippy all = "warn"`
-# matches the default clippy lint group at warn level, i.e. the same set CI
-# already enforces — no new lints are introduced. (`unsafe_code` is deliberately
-# left at its default level rather than `forbid`, because util.rs has a small
-# `extern "C"` FFI `kill` declaration that requires `unsafe`.)
-[lints.clippy]
-all = { level = "warn", priority = -1 }
-mod_module_files = "deny"
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+targets = ["x86_64-unknown-linux-gnu"]
 
 [profile.release]
 strip = true

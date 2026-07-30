@@ -84,7 +84,7 @@ const TITLE_CLEANUPS: &[(&str, &str)] = &[
     (r"^\s+|\s+$", ""),
 ];
 
-/// Output template: per-kind subdir / Artist / Title [id].ext.
+/// Output template: per-kind subdir / Artist / `Title [id].ext`.
 fn output_template(staging: &Path, kind: &str) -> String {
     format!(
         "{}/{kind}/%(artist,uploader,channel,creator|Unknown Artist)s/%(title)s [%(id)s].%(ext)s",

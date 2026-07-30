@@ -23,6 +23,7 @@ baseline="$probe/baseline.json"
 # (after it). Passing a flag through "$@" would make `env` consume it.
 gate_run() {
   set +e
+  # shellcheck disable=SC2086 # GATE_ARGS intentionally carries zero or more flags.
   env KACHE_CACHE_DIR="$probe/store" KACHE_GATE_ROOT="$probe/cold" \
       KACHE_GATE_BASELINE="$baseline" "$@" "$gate" ${GATE_ARGS:-}
   local rc=$?

@@ -1,7 +1,7 @@
 {
   "name": "ytdl-rmcp",
   "version": "1.0.3",
-  "description": "Download audio/video from any yt-dlp-supported site, tag it, and transfer it to local, SSH, or rclone targets.",
+  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "mcpServers": {
     "ytdl-rmcp": {
       "command": "ytdl-rmcp",

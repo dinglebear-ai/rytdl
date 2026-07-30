@@ -3,14 +3,14 @@
   "name": "ytdl-rmcp",
   "display_name": "yt-dlp Downloader",
   "version": "1.0.3",
-  "description": "Download audio/video from any yt-dlp-supported site, tag it, and transfer it to local, SSH, or rclone targets.",
+  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "long_description": "Cross-platform single-binary MCP server. Downloads media with yt-dlp, embeds metadata and cover art, organizes by artist, and transfers the result to a local path, an SSH target over rsync/scp, or an rclone target. yt-dlp and ffmpeg are auto-downloaded into a per-user cache on first run, so the bundle only ships the ytdl-rmcp binary itself.",
   "author": {
-    "name": "Jacob Magar"
+    "name": "dinglebear.ai"
   },
-  "homepage": "https://github.com/jmagar/rytdl",
-  "documentation": "https://github.com/jmagar/rytdl/blob/main/README.md",
-  "support": "https://github.com/jmagar/rytdl/issues",
+  "homepage": "https://rytdl.dinglebear.ai",
+  "documentation": "https://github.com/dinglebear-ai/rytdl/blob/main/README.md",
+  "support": "https://github.com/dinglebear-ai/rytdl/issues",
   "license": "MIT",
   "keywords": [
     "yt-dlp",

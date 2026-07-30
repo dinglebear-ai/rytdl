@@ -34,7 +34,7 @@ function releaseVersion(env = process.env) {
 }
 
 function releaseBaseUrl(env = process.env) {
-  return env.YTDL_RMCP_RELEASE_BASE_URL || "https://github.com/jmagar/rytdl/releases/download";
+  return env.YTDL_RMCP_RELEASE_BASE_URL || "https://github.com/dinglebear-ai/rytdl/releases/download";
 }
 
 function downloadUrl(target, env = process.env) {
