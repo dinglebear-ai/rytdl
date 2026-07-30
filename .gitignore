@@ -2,6 +2,14 @@
 /target/
 **/*.rs.bk
 
+# Secrets — ONLY .env.example may be committed.
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!**/.env.example
+
 # Cargo.lock IS committed (this is a binary, not a library)
 
 # Local cross-compile / xwin caches
@@ -15,6 +23,17 @@
 
 # Local scratch
 .worktrees/
+.full-review/
+.docs/
+.serena/
+.claire/
+.broadcastr/
+.octocode/
+.codex-ui-audit/
+.tier-c-research/
+.ruff_cache/
+.test-results/
+outputs/
 *.part
 *.ytdl
 packages/ytdl-rmcp/vendor/

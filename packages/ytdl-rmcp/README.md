@@ -1,13 +1,11 @@
 # ytdl-rmcp
 
 [![npm version](https://img.shields.io/npm/v/ytdl-rmcp.svg)](https://www.npmjs.com/package/ytdl-rmcp)
-[![release](https://github.com/jmagar/rytdl/actions/workflows/release.yml/badge.svg)](https://github.com/jmagar/rytdl/actions/workflows/release.yml)
-[![CI](https://github.com/jmagar/rytdl/actions/workflows/ci.yml/badge.svg)](https://github.com/jmagar/rytdl/actions/workflows/ci.yml)
+[![release](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml)
+[![CI](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml)
 
-A cross-platform, single-binary **MCP server** that downloads media from any
-[yt-dlp](https://github.com/yt-dlp/yt-dlp)-supported site (YouTube, Vimeo, …),
-embeds metadata and cover art, organizes files by artist, and transfers the
-result to a local path, an SSH target, or an rclone target.
+MCP server and CLI for yt-dlp: search and download media, embed metadata and
+cover art, then deliver to local, SSH, or rclone targets and Plex.
 
 Written in Rust on the [`rmcp`](https://crates.io/crates/rmcp) crate. **yt-dlp
 and ffmpeg are auto-downloaded** into a per-user cache on first run, so the host
@@ -52,14 +50,17 @@ filesystem writer for untrusted MCP callers.
 
 | Surface | This repo |
 | --- | --- |
-| Repository | `ytdl-rmcp` |
+| Repository | [`dinglebear-ai/rytdl`](https://github.com/dinglebear-ai/rytdl) |
+| Cargo crate | `ytdl-rmcp` |
 | npm package | `ytdl-rmcp` |
 | CLI / binary | `rytdl` |
 | MCP tools | `youtube_search`, `youtube_search_ui`, `youtube_download`, `youtube_probe`, `youtube_identify`, `youtube_stats`, `youtube_plex_playlist`, `youtube_transfer_queue` |
 | Env prefix | `YTDLP_*`, plus `FFMPEG_*`, `FPCALC_PATH`, and `YTDLP_LOG` |
+| Transport | stdio only — no HTTP listener, no service port |
 
-The repository and npm package use the `*-rmcp` family naming pattern, while the
-runtime binary is `rytdl` so local shells get a short Rust-native command.
+The crate and npm package use the `*-rmcp` family naming pattern, while the
+repository and runtime binary are `rytdl` so local shells get a short
+Rust-native command.
 
 ## Capabilities And Boundaries
 
@@ -95,10 +96,12 @@ runtime binary is `rytdl` so local shells get a short Rust-native command.
   media-host batch jobs.
 - **Self-installing** — `ytdl-rmcp setup` registers the server into Claude Code,
   Codex, and/or Gemini CLI via each tool's own `mcp add`.
-- **Robust transfers** — local paths use `rsync --partial` when present, SSH
-  targets (`host:/path`) use `rsync --protect-args` with an `scp` fallback, and
-  rclone targets (`remote:path` or `rclone:remote:/path`) use `rclone copy`. On transfer failure the
-  local staging copy is kept for retry.
+- **Robust transfers** — local paths (`/path`) are copied in-process by the
+  binary itself, SSH targets (`host:/path`) use `rsync -a --partial
+  --protect-args` with an `scp` fallback when `rsync` is missing, and rclone
+  targets (`remote:path` or `rclone:remote:/path`) use `rclone copy`. On
+  transfer failure the local staging copy is kept for retry and recorded as a
+  drainable manifest for `youtube_transfer_queue`.
 - **Repeat-safe** — `use_archive` records downloaded IDs (per mode) and skips
   them on later runs; YouTube mix/radio URLs are auto-cleaned to the seed video.
 - **Stats-ready ledger** — every completed download call appends a JSONL entry
@@ -321,11 +324,11 @@ The npm package downloads the matching GitHub Release binary during
 Node launcher. You can also use the one-line installer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jmagar/rytdl/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dinglebear-ai/rytdl/main/scripts/install.sh | bash
 ```
 
 Or download the binary tarball for your platform from
-[Releases](https://github.com/jmagar/rytdl/releases), or build it (see below).
+[Releases](https://github.com/dinglebear-ai/rytdl/releases), or build it (see below).
 The guided setup fetches yt-dlp + ffmpeg, prompts for your audio/video target
 paths, detects which agent CLIs are present, and registers the server into the
 ones you pick.
@@ -432,7 +435,7 @@ extraction.
 | Guided setup | `npx -y ytdl-rmcp setup` | Registers Claude Code, Codex, and Gemini CLI configs where available. |
 | MCP App | `youtube_search_ui` | Embedded search widget plus normal fallback tool output. |
 | Bundle | `mcpb/manifest.json` | Binary MCPB/DXT package for desktop hosts that support bundles. |
-| Container | `ghcr.io/jmagar/rytdl:main` | Includes ffmpeg, fpcalc, SSH, rclone, and rsync for shared deployments. |
+| Container | `ghcr.io/dinglebear-ai/rytdl:main` | Includes ffmpeg, fpcalc, SSH, rclone, and rsync for shared deployments. |
 
 ## Distribution Contract
 
@@ -444,9 +447,9 @@ extraction.
   `userConfig`; `.mcp.json` launches `npx -y ytdl-rmcp`, which downloads the
   matching GitHub Release binary through npm.
 - **Gemini CLI extension** — `gemini-extension.json`; install with
-  `gemini extensions install https://github.com/jmagar/rytdl`. MCP clients
+  `gemini extensions install https://github.com/dinglebear-ai/rytdl`. MCP clients
   should prefer the npm launcher command, `npx -y ytdl-rmcp`.
-- **Container image** — `ghcr.io/jmagar/rytdl:main` is published on every
+- **Container image** — `ghcr.io/dinglebear-ai/rytdl:main` is published on every
   push to `main`, or build locally with `docker build -t ytdl-rmcp:local .`. It
   includes `ffmpeg`, `fpcalc`, `openssh-client`, `rclone`, and `rsync`. See
   [`docs/container.md`](docs/container.md) for MCP and mounted-library examples.
@@ -472,8 +475,9 @@ results look unavailable.
 
 Target path forms:
 
-- `/path/to/library` — local directory. Uses `rsync --partial` when available,
-  otherwise a Rust filesystem copy. Requires `YTDLP_ALLOW_LOCAL_TARGETS=true` because local paths let MCP callers choose write locations.
+- `/path/to/library` — local directory. Copied by the binary's own filesystem
+  copy (no external tool); a destination nested inside the staging source is
+  rejected. Requires `YTDLP_ALLOW_LOCAL_TARGETS=true` because local paths let MCP callers choose write locations.
 - `host:/path/to/library` — SSH target. Uses the existing rsync/scp flow and
   honors `YTDLP_SSH_OPTS`.
 - `remote:path/to/library` — rclone target with a relative remote path. Uses `rclone copy`; `rclone` must be
@@ -521,8 +525,9 @@ Target path forms:
 
 ## Authentication
 
-The stdio server has no network listener or HTTP auth layer by default; access is
-whatever the local MCP client grants to the process it launches. External
+This server speaks **stdio only** — it opens no network listener, binds no
+port, and has no HTTP auth layer. Access is whatever the local MCP client
+grants to the process it launches. External
 credentials live in operator-controlled environment variables, local config, SSH
 agents, rclone config, or Plex/AcoustID variables.
 
@@ -571,8 +576,9 @@ config** — it is not a hardened multi-tenant boundary.
 
 ## Requirements
 
-- **rsync** is recommended for local and SSH transfers; local transfers fall
-  back to **cp**, and SSH transfers fall back to **scp**.
+- **rsync** is recommended for SSH transfers and falls back to **scp** when
+  absent. Local transfers need no external tool — the binary copies the tree
+  itself.
 - **ssh** plus passwordless key-based auth when using `host:/path` targets.
 - **rclone** plus a configured rclone remote when using `remote:path` or `rclone:remote:/path` targets.
 - yt-dlp and ffmpeg are fetched automatically (override with `YTDLP_PATH` /
@@ -604,9 +610,7 @@ On dookie/local shells, `~/.local/bin/cargo` is a wrapper that can break
 CI (`.github/workflows/`) runs fmt + clippy + tests and a Windows cross-build on
 every push/PR, and publishes both binaries to a GitHub Release on `v*` tags.
 
-This crate intentionally remains on Rust edition 2021 for the distributable
-single-binary/plugin build. Move to edition 2024 only after proving Linux,
-Windows MSVC cross-build, and plugin startup compatibility together.
+This single-crate workspace uses Rust edition 2024 with MSRV 1.97.1.
 
 ## Verification
 
@@ -638,8 +642,8 @@ Bare invocation serves MCP over stdio; `setup` runs the installer. A
 3. *(optional)* When `YTDLP_ACOUSTID_CLIENT_KEY` is set, fingerprints the
    downloaded audio and writes high-confidence MusicBrainz/AcoustID tags
    in-place — before transfer, so the target copy carries the canonical tags.
-4. Transfers each kind's subtree to its target: local rsync/cp, SSH rsync/scp,
-   or rclone copy.
+4. Transfers each kind's subtree to its target: local in-process copy, SSH
+   rsync/scp, or `rclone copy`.
 5. *(optional)* When Plex credentials are configured and the transfer
    succeeded, adds the downloaded audio tracks to the target Plex playlist.
 6. Appends the completed call to the JSONL download ledger.
@@ -675,19 +679,19 @@ See `CLAUDE.md` for architecture, conventions, and gotchas.
 
 ## Related Servers
 
-- [soma](https://github.com/jmagar/soma) - RMCP runtime for provider-backed MCP servers.
-- [unifi-rmcp](https://github.com/jmagar/runifi) - UniFi controller REST API bridge.
-- [tailscale-rmcp](https://github.com/jmagar/rtailscale) - Tailscale API bridge for devices, users, and tailnet operations.
-- [unraid-rmcp](https://github.com/jmagar/runraid) - Unraid GraphQL bridge for NAS and server management.
-- [apprise-rmcp](https://github.com/jmagar/rapprise) - Apprise notification fan-out bridge for many delivery backends.
-- [gotify-rmcp](https://github.com/jmagar/rgotify) - Gotify push notification bridge for sends, messages, apps, and clients.
-- [arcane-rmcp](https://github.com/jmagar/rarcane) - Arcane Docker management bridge for containers and related resources.
-- [yarr](https://github.com/jmagar/yarr) - Media-stack bridge for Sonarr, Radarr, Prowlarr, Plex, and related services.
-- [synapse-rmcp](https://github.com/jmagar/synapse) - Local Synapse workflow server for scout and flux actions.
-- [cortex](https://github.com/jmagar/cortex) - Syslog and homelab log aggregation MCP server.
-- [axon](https://github.com/jmagar/axon) - RAG, crawl, scrape, extract, and semantic search project.
-- [labby](https://github.com/jmagar/labby) - Homelab control plane and MCP gateway project.
-- [lumen](https://github.com/jmagar/lumen) - Local semantic code search MCP server.
+- [soma](https://github.com/dinglebear-ai/soma) - RMCP runtime for provider-backed MCP servers.
+- [unifi-rmcp](https://github.com/dinglebear-ai/runifi) - UniFi controller REST API bridge.
+- [tailscale-rmcp](https://github.com/dinglebear-ai/rtailscale) - Tailscale API bridge for devices, users, and tailnet operations.
+- [unraid](https://github.com/dinglebear-ai/unraid) - Unraid GraphQL bridge for NAS and server management.
+- [apprise-rmcp](https://github.com/dinglebear-ai/rapprise) - Apprise notification fan-out bridge for many delivery backends.
+- [gotify-rmcp](https://github.com/dinglebear-ai/rgotify) - Gotify push notification bridge for sends, messages, apps, and clients.
+- [arcane-rmcp](https://github.com/dinglebear-ai/rarcane) - Arcane Docker management bridge for containers and related resources.
+- [yarr](https://github.com/dinglebear-ai/yarr) - Media-stack bridge for Sonarr, Radarr, Prowlarr, Plex, and related services.
+- [synapse-rmcp](https://github.com/dinglebear-ai/synapse) - Local Synapse workflow server for scout and flux actions.
+- [cortex](https://github.com/dinglebear-ai/cortex) - Syslog and homelab log aggregation MCP server.
+- [axon](https://github.com/dinglebear-ai/axon) - RAG, crawl, scrape, extract, and semantic search project.
+- [labby](https://github.com/dinglebear-ai/labby) - Homelab control plane and MCP gateway project.
+- [lumen](https://github.com/dinglebear-ai/lumen) - Local semantic code search MCP server.
 
 ## Documentation
 
@@ -711,6 +715,7 @@ MIT — see `LICENSE`.
 
 This repo follows the Rust MCP server naming convention:
 
-- Repo: `ytdl-rmcp`
+- Repo: `dinglebear-ai/rytdl`
+- Cargo crate: `ytdl-rmcp`
 - CLI alias: `rytdl`
 - npm package: `ytdl-rmcp`

@@ -1,3 +1,9 @@
+---
+title: "Container Runtime"
+created: 2026-06-12
+updated: 2026-07-30
+---
+
 # Container Runtime
 
 The container image packages `ytdl-rmcp` with the host tools needed for download,
@@ -23,14 +29,14 @@ docker build -t ytdl-rmcp:local .
 Every push to `main` publishes:
 
 ```text
-ghcr.io/jmagar/rytdl:main
-ghcr.io/jmagar/rytdl:main-<git-sha>
+ghcr.io/dinglebear-ai/rytdl:main
+ghcr.io/dinglebear-ai/rytdl:main-<git-sha>
 ```
 
 Pull the latest `main` image with:
 
 ```bash
-docker pull ghcr.io/jmagar/rytdl:main
+docker pull ghcr.io/dinglebear-ai/rytdl:main
 ```
 
 ## Run As An MCP Server
@@ -46,11 +52,11 @@ docker run --rm -i \
   -v "$HOME/.ssh:/home/ytdl/.ssh:ro" \
   -v ytdl-rmcp-state:/home/ytdl/.local/state/ytdl-rmcp \
   -v ytdl-rmcp-cache:/home/ytdl/.cache \
-  ghcr.io/jmagar/rytdl:main serve
+  ghcr.io/dinglebear-ai/rytdl:main serve
 ```
 
 For MCP clients that expect a command, use
-`docker run --rm -i ... ghcr.io/jmagar/rytdl:main serve` as the command.
+`docker run --rm -i ... ghcr.io/dinglebear-ai/rytdl:main serve` as the command.
 
 ## Identify A Mounted Library
 
@@ -62,7 +68,7 @@ docker run --rm -i \
   -e YTDLP_ACOUSTID_CLIENT_KEY="$YTDLP_ACOUSTID_CLIENT_KEY" \
   -e YTDLP_MUSICBRAINZ_CONTACT="you@example.com" \
   -v /mnt/user/data/media/music/yt-dlp:/library \
-  ghcr.io/jmagar/rytdl:main serve
+  ghcr.io/dinglebear-ai/rytdl:main serve
 ```
 
 Then call:

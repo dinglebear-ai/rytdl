@@ -1,3 +1,9 @@
+---
+title: "MusicBrainz / AcoustID metadata plan"
+created: 2026-06-12
+updated: 2026-07-30
+---
+
 # MusicBrainz / AcoustID metadata plan
 
 ## Goal

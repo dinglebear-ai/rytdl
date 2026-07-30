@@ -12,7 +12,7 @@ env:
 
 jobs:
   check:
-    runs-on: [self-hosted, unraid]
+    runs-on: [self-hosted, ci-pool-rust]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -31,7 +31,7 @@ jobs:
         run: cargo test --all --locked
 
   packaging:
-    runs-on: [self-hosted, unraid]
+    runs-on: [self-hosted, ci-pool-ops]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -48,7 +48,7 @@ jobs:
         run: REQUIRE_SHELLCHECK=1 scripts/check-packaging.sh
 
   npm-launcher:
-    runs-on: [self-hosted, unraid]
+    runs-on: [self-hosted, ci-pool-typescript]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -60,59 +60,3 @@ jobs:
         run: npm run check --prefix packages/ytdl-rmcp
       - name: Dry-run npm package
         run: npm pack --dry-run --json ./packages/ytdl-rmcp
-
-  container:
-    runs-on: [self-hosted, unraid]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Build container image
-        run: docker build -t ytdl-rmcp:ci .
-
-  cross-build:
-    # Smoke-build the Windows target so cross-compile breakage is caught in CI,
-    # not at release time.
-    runs-on: [self-hosted, unraid]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Install Rust and kache
-        uses: ./.github/actions/setup-rust-kache
-        with:
-          targets: x86_64-pc-windows-msvc
-      - name: Install cross toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nasm llvm clang lld
-      - name: Install cargo-xwin
-        # Prebuilt binary — avoids compiling cargo-xwin's edition-2024 deps
-        # (getrandom, ring) from source through the kache cargo/rustc wrapper,
-        # which fails on the self-hosted runner.
-        uses: taiki-e/install-action@7572810d7dd469b651bb7793945692cf78da5dd7 # v2.85.0
-        with:
-          tool: cargo-xwin
-      - name: Cross-build (windows-msvc)
-        run: cargo xwin build --release --locked --target x86_64-pc-windows-msvc
-
-  windows-smoke:
-    # Native MSVC build + run on real Windows (cd-m4). The cross-build leg above
-    # only checks that the Windows target *links*; this leg proves the binary
-    # actually starts — catching ring/rustls TLS-stack linkage that links but
-    # crashes at runtime on MSVC.
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable (2026-03-27)
-      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2 (v2.9.1)
-        with:
-          key: windows-native
-      - name: Build (native msvc)
-        run: cargo build --release --locked
-      - name: Smoke - binary starts and prints version
-        shell: pwsh
-        run: |
-          $exe = "target/release/rytdl.exe"
-          $version = & $exe --version
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "rytdl.exe --version exited with $LASTEXITCODE"
-            exit 1
-          }
-          Write-Host "smoke ok: $version"

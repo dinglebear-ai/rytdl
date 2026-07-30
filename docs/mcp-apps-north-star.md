@@ -1,3 +1,9 @@
+---
+title: "MCP Apps North Star"
+created: 2026-07-12
+updated: 2026-07-30
+---
+
 # MCP Apps North Star
 
 This document is the reusable MCP Apps pattern for `ytdl-rmcp` and the other

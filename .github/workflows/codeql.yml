@@ -25,7 +25,7 @@ permissions:
 jobs:
   codeql:
     name: CodeQL (rust)
-    runs-on: [self-hosted, unraid]
+    runs-on: [self-hosted, ci-pool-ops]
     permissions:
       security-events: write
       contents: read

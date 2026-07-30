@@ -2,11 +2,11 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "ai.dinglebear/ytdl-rmcp",
   "title": "YTDL RMCP",
-  "description": "Rust MCP server and CLI for yt-dlp search, downloads, metadata, transfers, and Plex playlists.",
+  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "version": "1.0.3",
-  "websiteUrl": "https://github.com/jmagar/rytdl",
+  "websiteUrl": "https://rytdl.dinglebear.ai",
   "repository": {
-    "url": "https://github.com/jmagar/rytdl",
+    "url": "https://github.com/dinglebear-ai/rytdl",
     "source": "github",
     "id": "1259656855"
   },
@@ -64,8 +64,8 @@
           "format": "string",
           "isRequired": false,
           "isSecret": false,
-          "default": "https://github.com/jmagar/rytdl/releases/download",
-          "placeholder": "https://github.com/jmagar/rytdl/releases/download"
+          "default": "https://github.com/dinglebear-ai/rytdl/releases/download",
+          "placeholder": "https://github.com/dinglebear-ai/rytdl/releases/download"
         },
         {
           "name": "RUST_LOG",
@@ -92,7 +92,7 @@
       },
       "buildInfo": {
         "version": "1.0.3",
-        "repository": "https://github.com/jmagar/rytdl"
+        "repository": "https://github.com/dinglebear-ai/rytdl"
       }
     }
   }

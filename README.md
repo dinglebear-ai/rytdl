@@ -4,10 +4,8 @@
 [![release](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml)
 [![CI](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml)
 
-A cross-platform, single-binary **MCP server** that downloads media from any
-[yt-dlp](https://github.com/yt-dlp/yt-dlp)-supported site (YouTube, Vimeo, …),
-embeds metadata and cover art, organizes files by artist, and transfers the
-result to a local path, an SSH target, or an rclone target.
+MCP server and CLI for yt-dlp: search and download media, embed metadata and
+cover art, then deliver to local, SSH, or rclone targets and Plex.
 
 Written in Rust on the [`rmcp`](https://crates.io/crates/rmcp) crate. **yt-dlp
 and ffmpeg are auto-downloaded** into a per-user cache on first run, so the host
@@ -612,9 +610,7 @@ On dookie/local shells, `~/.local/bin/cargo` is a wrapper that can break
 CI (`.github/workflows/`) runs fmt + clippy + tests and a Windows cross-build on
 every push/PR, and publishes both binaries to a GitHub Release on `v*` tags.
 
-This crate intentionally remains on Rust edition 2021 for the distributable
-single-binary/plugin build. Move to edition 2024 only after proving Linux,
-Windows MSVC cross-build, and plugin startup compatibility together.
+This single-crate workspace uses Rust edition 2024 with MSRV 1.97.1.
 
 ## Verification
 
