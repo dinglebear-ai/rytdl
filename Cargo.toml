@@ -14,8 +14,8 @@ repository = "https://github.com/dinglebear-ai/rytdl"
 description = "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex."
 
 [workspace.dependencies]
-rmcp = { version = "=3.0.0-beta.2", default-features = false }
-schemars = "=1.2.1"
+rmcp = { version = "=3.0.0-beta.3", default-features = false }
+schemars = "=1.2.2"
 
 [workspace.lints.clippy]
 all = { level = "warn", priority = -1 }
