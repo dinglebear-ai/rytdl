@@ -63,8 +63,8 @@
   ],
   "packages": {
     ".": {
-      "package-name": "@dinglebear/rytdl-mcp",
-      "component": "@dinglebear/rytdl-mcp",
+      "package-name": "@dinglebear/rytdl",
+      "component": "@dinglebear/rytdl",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         "packages/ytdl-rmcp/package.json",
@@ -78,7 +78,7 @@
         {
           "type": "json",
           "path": "server.json",
-          "jsonpath": "$.packages[?(@.identifier == '@dinglebear/rytdl-mcp')].version"
+          "jsonpath": "$.packages[?(@.identifier == '@dinglebear/rytdl')].version"
         },
         {
           "type": "json",

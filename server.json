@@ -24,7 +24,7 @@
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "@dinglebear/rytdl-mcp",
+      "identifier": "@dinglebear/rytdl",
       "version": "1.0.3",
       "runtimeHint": "npx",
       "environmentVariables": [
@@ -87,8 +87,8 @@
       "namespace": "ai.dinglebear",
       "dnsDomain": "dinglebear.ai",
       "distribution": {
-        "npm": "@dinglebear/rytdl-mcp@1.0.3",
-        "nodePackage": "@dinglebear/rytdl-mcp"
+        "npm": "@dinglebear/rytdl@1.0.3",
+        "nodePackage": "@dinglebear/rytdl"
       },
       "buildInfo": {
         "version": "1.0.3",

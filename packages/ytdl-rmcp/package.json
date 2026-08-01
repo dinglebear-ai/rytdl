@@ -1,5 +1,5 @@
 {
-  "name": "@dinglebear/rytdl-mcp",
+  "name": "@dinglebear/rytdl",
   "version": "1.0.3",
   "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "license": "MIT",
