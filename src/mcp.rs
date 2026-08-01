@@ -37,7 +37,7 @@ fn text_tool_result<E: std::fmt::Display>(
 
 fn json_text_tool_result<E: std::fmt::Display>(
     result: std::result::Result<String, E>,
-    meta: rmcp::model::Meta,
+    meta: rmcp::model::MetaObject,
 ) -> CallToolResult {
     match result {
         Ok(text) => {
@@ -57,7 +57,7 @@ fn json_text_tool_result<E: std::fmt::Display>(
 /// error path is identical to [`text_tool_result`] / [`error_tool_result`].
 fn structured_tool_result<T, E>(
     result: std::result::Result<T, E>,
-    meta: rmcp::model::Meta,
+    meta: rmcp::model::MetaObject,
 ) -> CallToolResult
 where
     T: serde::Serialize,

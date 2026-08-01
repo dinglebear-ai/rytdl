@@ -1,4 +1,6 @@
-use rmcp::model::{ListResourcesResult, Meta, ReadResourceResult, Resource, ResourceContents};
+use rmcp::model::{
+    ListResourcesResult, MetaObject, ReadResourceResult, Resource, ResourceContents,
+};
 use serde_json::json;
 
 pub const RESOURCE_URI: &str = "ui://ytdl-rmcp/youtube-search.html";
@@ -38,7 +40,7 @@ pub fn read_app_resource(uri: &str) -> Option<ReadResourceResult> {
     ]))
 }
 
-pub fn resource_meta() -> Meta {
+pub fn resource_meta() -> MetaObject {
     let mut meta = ui_meta(json!({
             "csp": {
                 "connectDomains": [],
@@ -74,7 +76,7 @@ pub fn resource_meta() -> Meta {
     meta
 }
 
-pub fn tool_meta() -> Meta {
+pub fn tool_meta() -> MetaObject {
     let mut meta = ui_meta(json!({ "resourceUri": RESOURCE_URI }));
     meta.0
         .insert("openai/outputTemplate".into(), json!(RESOURCE_URI));
@@ -89,15 +91,15 @@ pub fn tool_meta() -> Meta {
     meta
 }
 
-pub fn app_callable_tool_meta() -> Meta {
+pub fn app_callable_tool_meta() -> MetaObject {
     let mut meta = ui_meta(json!({ "visibility": ["model", "app"] }));
     meta.0.insert("openai/widgetAccessible".into(), json!(true));
     meta.0.insert("openai/visibility".into(), json!("public"));
     meta
 }
 
-fn ui_meta(value: serde_json::Value) -> Meta {
-    let mut meta = Meta::new();
+fn ui_meta(value: serde_json::Value) -> MetaObject {
+    let mut meta = MetaObject::new();
     meta.0.insert(UI_META_KEY.into(), value);
     meta
 }
