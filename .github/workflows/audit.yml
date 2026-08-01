@@ -31,7 +31,7 @@ jobs:
         # Prebuilt binary — building cargo-audit from source pulls aws-lc-sys,
         # which (a) fails to C-compile against the runner's OpenSSL 3 headers and
         # (b) violates this repo's own "forbid aws-lc-sys" policy.
-        uses: taiki-e/install-action@v2
+        uses: taiki-e/install-action@v2.85.4
         with:
           tool: cargo-audit
 
