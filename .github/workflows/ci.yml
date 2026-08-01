@@ -12,7 +12,7 @@ env:
 
 jobs:
   check:
-    runs-on: [self-hosted, ci-pool-rust]
+    runs-on: ci-pool-rust
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -31,7 +31,7 @@ jobs:
         run: cargo test --all --locked
 
   packaging:
-    runs-on: [self-hosted, ci-pool-ops]
+    runs-on: ci-pool-ops
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -48,7 +48,7 @@ jobs:
         run: REQUIRE_SHELLCHECK=1 scripts/check-packaging.sh
 
   npm-launcher:
-    runs-on: [self-hosted, ci-pool-typescript]
+    runs-on: ci-pool-typescript
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0

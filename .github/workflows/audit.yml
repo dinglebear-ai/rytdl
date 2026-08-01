@@ -20,7 +20,7 @@ env:
 
 jobs:
   audit:
-    runs-on: [self-hosted, ci-pool-rust]
+    runs-on: ci-pool-rust
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -41,7 +41,7 @@ jobs:
   forbid-aws-lc:
     # Hard cross-compile invariant: the TLS stack must be ring-only. If aws-lc-sys
     # creeps into the tree, the Windows MSVC build breaks — fail fast here.
-    runs-on: [self-hosted, ci-pool-rust]
+    runs-on: ci-pool-rust
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
