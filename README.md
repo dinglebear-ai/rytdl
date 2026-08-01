@@ -11,7 +11,7 @@ Written in Rust on the [`rmcp`](https://crates.io/crates/rmcp) crate. **yt-dlp
 and ffmpeg are auto-downloaded** into a per-user cache on first run, so the host
 needs neither pre-installed — the one binary is the whole install.
 
-**30-second path:** `npx -y ytdl-rmcp setup` -> configure a target path ->
+**30-second path:** `npx -y @dinglebear/rytdl-mcp setup` -> configure a target path ->
 call `youtube_search` or `youtube_probe`; use `youtube_download` only after the
 destination and trust boundary are clear.
 
@@ -52,7 +52,7 @@ filesystem writer for untrusted MCP callers.
 | --- | --- |
 | Repository | [`dinglebear-ai/rytdl`](https://github.com/dinglebear-ai/rytdl) |
 | Cargo crate | `ytdl-rmcp` |
-| npm package | `ytdl-rmcp` |
+| npm package | `@dinglebear/rytdl-mcp` |
 | CLI / binary | `rytdl` |
 | MCP tools | `youtube_search`, `youtube_search_ui`, `youtube_download`, `youtube_probe`, `youtube_identify`, `youtube_stats`, `youtube_plex_playlist`, `youtube_transfer_queue` |
 | Env prefix | `YTDLP_*`, plus `FFMPEG_*`, `FPCALC_PATH`, and `YTDLP_LOG` |
@@ -300,8 +300,8 @@ tools.
 The npm launcher exposes the same binary:
 
 ```bash
-npx -y ytdl-rmcp doctor
-npx -y ytdl-rmcp serve
+npx -y @dinglebear/rytdl-mcp doctor
+npx -y @dinglebear/rytdl-mcp serve
 ```
 
 ## Install
@@ -309,13 +309,13 @@ npx -y ytdl-rmcp serve
 Run the guided installer through npm:
 
 ```bash
-npx -y ytdl-rmcp setup
+npx -y @dinglebear/rytdl-mcp setup
 ```
 
 Or install the command globally:
 
 ```bash
-npm i -g ytdl-rmcp
+npm i -g @dinglebear/rytdl-mcp
 ytdl-rmcp setup
 ```
 
@@ -338,7 +338,7 @@ ones you pick.
 After setup, prove the read-only path first:
 
 ```bash
-npx -y ytdl-rmcp doctor
+npx -y @dinglebear/rytdl-mcp doctor
 ```
 
 For raw MCP clients, call a read-only tool with JSON-RPC `tools/call`:
@@ -381,21 +381,21 @@ trusted MCP callers write into.
 
 ## Client Configuration
 
-Run without subcommands, `npx -y ytdl-rmcp` serves MCP over stdio. Register it
+Run without subcommands, `npx -y @dinglebear/rytdl-mcp` serves MCP over stdio. Register it
 yourself:
 
 ```bash
 # Claude Code
-claude mcp add -s user ytdl-rmcp -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y ytdl-rmcp
+claude mcp add -s user @dinglebear/rytdl-mcp -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y @dinglebear/rytdl-mcp
 # Codex
-codex  mcp add --env YTDLP_TARGET_PATH=tootie:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android ytdl-rmcp -- npx -y ytdl-rmcp
+codex  mcp add --env YTDLP_TARGET_PATH=tootie:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android @dinglebear/rytdl-mcp -- npx -y @dinglebear/rytdl-mcp
 # Gemini CLI (command is positional, env last)
-gemini mcp add -s user ytdl-rmcp npx -y ytdl-rmcp -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
+gemini mcp add -s user @dinglebear/rytdl-mcp npx -y @dinglebear/rytdl-mcp -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
 ```
 
-If you already installed a standalone binary with `npm i -g ytdl-rmcp`,
+If you already installed a standalone binary with `npm i -g @dinglebear/rytdl-mcp`,
 `scripts/install.sh`, or a release tarball, you can use that binary path in
-place of `npx -y ytdl-rmcp`.
+place of `npx -y @dinglebear/rytdl-mcp`.
 
 For raw MCP JSON configs, include the required target path env var and the
 YouTube extractor override:
@@ -430,25 +430,25 @@ extraction.
 
 | Surface | Command or file | Notes |
 | --- | --- | --- |
-| stdio MCP server | `npx -y ytdl-rmcp` or `rytdl` | Default runtime for local MCP clients. |
+| stdio MCP server | `npx -y @dinglebear/rytdl-mcp` or `rytdl` | Default runtime for local MCP clients. |
 | CLI | `rytdl --help` | Same binary; exposes setup and diagnostics. |
-| Guided setup | `npx -y ytdl-rmcp setup` | Registers Claude Code, Codex, and Gemini CLI configs where available. |
+| Guided setup | `npx -y @dinglebear/rytdl-mcp setup` | Registers Claude Code, Codex, and Gemini CLI configs where available. |
 | MCP App | `youtube_search_ui` | Embedded search widget plus normal fallback tool output. |
 | Bundle | `mcpb/manifest.json` | Binary MCPB/DXT package for desktop hosts that support bundles. |
 | Container | `ghcr.io/dinglebear-ai/rytdl:main` | Includes ffmpeg, fpcalc, SSH, rclone, and rsync for shared deployments. |
 
 ## Distribution Contract
 
-- **npm launcher** — `npx -y ytdl-rmcp` downloads and runs the matching
+- **npm launcher** — `npx -y @dinglebear/rytdl-mcp` downloads and runs the matching
   GitHub Release binary. Run without subcommands, it serves MCP over stdio;
-  `npx -y ytdl-rmcp setup` runs the guided installer. Stable releases publish
+  `npx -y @dinglebear/rytdl-mcp setup` runs the guided installer. Stable releases publish
   the package from GitHub Actions with npm provenance.
 - **Claude Code plugin** — `.claude-plugin/plugin.json` prompts for config via
-  `userConfig`; `.mcp.json` launches `npx -y ytdl-rmcp`, which downloads the
+  `userConfig`; `.mcp.json` launches `npx -y @dinglebear/rytdl-mcp`, which downloads the
   matching GitHub Release binary through npm.
 - **Gemini CLI extension** — `gemini-extension.json`; install with
   `gemini extensions install https://github.com/dinglebear-ai/rytdl`. MCP clients
-  should prefer the npm launcher command, `npx -y ytdl-rmcp`.
+  should prefer the npm launcher command, `npx -y @dinglebear/rytdl-mcp`.
 - **Container image** — `ghcr.io/dinglebear-ai/rytdl:main` is published on every
   push to `main`, or build locally with `docker build -t ytdl-rmcp:local .`. It
   includes `ffmpeg`, `fpcalc`, `openssh-client`, `rclone`, and `rsync`. See
@@ -654,7 +654,7 @@ See `CLAUDE.md` for architecture, conventions, and gotchas.
 
 ## Deployment
 
-- Local clients should use `npx -y ytdl-rmcp` or the installed `rytdl` binary
+- Local clients should use `npx -y @dinglebear/rytdl-mcp` or the installed `rytdl` binary
   over stdio.
 - Shared runtime jobs can use the container image when ffmpeg, fpcalc, SSH,
   rclone, and rsync should be present without host-level installs.
@@ -718,4 +718,4 @@ This repo follows the Rust MCP server naming convention:
 - Repo: `dinglebear-ai/rytdl`
 - Cargo crate: `ytdl-rmcp`
 - CLI alias: `rytdl`
-- npm package: `ytdl-rmcp`
+- npm package: `@dinglebear/rytdl-mcp`
