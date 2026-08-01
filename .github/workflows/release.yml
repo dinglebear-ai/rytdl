@@ -212,6 +212,11 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
+      - name: Validate npm publication identity
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm whoami >/dev/null
+
       - name: Verify npm package version matches release tag
         id: npm-version
         shell: bash
@@ -237,7 +242,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if npm view "ytdl-rmcp@${{ steps.npm-version.outputs.version }}" version >/dev/null 2>&1; then
+          if npm view "@dinglebear/rytdl@${{ steps.npm-version.outputs.version }}" version >/dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
@@ -256,15 +261,15 @@ jobs:
           cache="$(mktemp -d)"
           trap 'rm -rf "$cache"' EXIT
           for attempt in {1..12}; do
-            if npm view "ytdl-rmcp@${{ steps.npm-version.outputs.version }}" version >/dev/null 2>&1; then
+            if npm view "@dinglebear/rytdl@${{ steps.npm-version.outputs.version }}" version >/dev/null 2>&1; then
               break
             fi
             if [[ "$attempt" == 12 ]]; then
-              npm view "ytdl-rmcp@${{ steps.npm-version.outputs.version }}" version
+              npm view "@dinglebear/rytdl@${{ steps.npm-version.outputs.version }}" version
             fi
             sleep 5
           done
-          npm_config_cache="$cache" npx -y "ytdl-rmcp@${{ steps.npm-version.outputs.version }}" --version
+          npm_config_cache="$cache" npx -y "@dinglebear/rytdl@${{ steps.npm-version.outputs.version }}" --version
 
   test:
     runs-on: ubuntu-24.04

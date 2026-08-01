@@ -145,10 +145,10 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
   `release-please.yml`, `container.yml` (ghcr image on `main`), `audit.yml`,
   `codeql.yml`, and `openwiki-update.yml`.
 - **npm launcher**: `packages/ytdl-rmcp` publishes `ytdl-rmcp` to npm. MCP clients
-  should launch with `npx -y ytdl-rmcp`; the npm postinstall/lazy installer
+  should launch with `npx -y @dinglebear/rytdl`; the npm postinstall/lazy installer
   downloads the matching GitHub Release binary.
 - **Claude Code plugin**: root `.claude-plugin/plugin.json` + `.mcp.json` +
-  `skills/ytdl/`. `.mcp.json` uses `npx -y ytdl-rmcp` plus plugin `userConfig`
+  `skills/ytdl/`. `.mcp.json` uses `npx -y @dinglebear/rytdl` plus plugin `userConfig`
   env mapping. **This plugin ships no hooks** — there is no `hooks/` dir and
   `plugin.json` has no `hooks` key; do not reintroduce one.
 - **Container**: `Dockerfile` → `ghcr.io/dinglebear-ai/rytdl:main`, bundling

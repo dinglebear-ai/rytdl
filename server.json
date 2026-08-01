@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "ai.dinglebear/ytdl-rmcp",
+  "name": "ai.dinglebear/rytdl",
   "title": "YTDL RMCP",
   "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "version": "1.0.3",
@@ -24,7 +24,7 @@
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "ytdl-rmcp",
+      "identifier": "@dinglebear/rytdl",
       "version": "1.0.3",
       "runtimeHint": "npx",
       "environmentVariables": [
@@ -87,8 +87,8 @@
       "namespace": "ai.dinglebear",
       "dnsDomain": "dinglebear.ai",
       "distribution": {
-        "npm": "ytdl-rmcp@1.0.3",
-        "nodePackage": "ytdl-rmcp"
+        "npm": "@dinglebear/rytdl@1.0.3",
+        "nodePackage": "@dinglebear/rytdl"
       },
       "buildInfo": {
         "version": "1.0.3",
