@@ -4,8 +4,7 @@
 [![release](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml)
 [![CI](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml)
 
-MCP server and CLI for yt-dlp: search and download media, embed metadata and
-cover art, then deliver to local, SSH, or rclone targets and Plex.
+yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI.
 
 Written in Rust on the [`rmcp`](https://crates.io/crates/rmcp) crate. **yt-dlp
 and ffmpeg are auto-downloaded** into a per-user cache on first run, so the host

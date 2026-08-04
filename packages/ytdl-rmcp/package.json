@@ -1,7 +1,7 @@
 {
   "name": "@dinglebear/rytdl",
   "version": "1.0.4",
-  "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
+  "description": "yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI.",
   "license": "MIT",
   "repository": {
     "type": "git",
