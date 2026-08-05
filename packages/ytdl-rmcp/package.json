@@ -1,8 +1,8 @@
 {
   "name": "@dinglebear/rytdl",
   "version": "1.0.4",
+  "license": "AGPL-3.0-only",
   "description": "yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI.",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dinglebear-ai/rytdl.git",
