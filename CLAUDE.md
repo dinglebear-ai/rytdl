@@ -19,6 +19,7 @@ User-facing docs live in `README.md`. This file is for working **on** the repo.
 | Edition / MSRV | 2024 / Rust 1.97.1 |
 | MCP crate | `rmcp = "=3.0.0-beta.2"`, `default-features = false`, features `server`/`macros`/`transport-io`/`schemars` |
 | Transport | **stdio only. There is NO HTTP server and no service port.** `transport-io` is the only transport feature; nothing in `src/` binds a socket |
+| TOOTIE deployment | Product-owned persistent runtime declaration at `ops/compose/tootie/`; MCP sessions launch through `mcp-stdio.sh` using `docker exec -i` |
 | Lints | Workspace Clippy + rustdoc Phase-0 policy; CI gates with `clippy -D warnings` |
 
 Two deliberate divergences from the rest of the rmcp fleet:

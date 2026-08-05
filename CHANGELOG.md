@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a product-owned TOOTIE Compose declaration for the persistent stdio runtime container, including a path-independent `docker exec -i` launcher and CI validation.
 - Added a Plex playlist builder for successful transferred audio history, with
   read-only preview, idempotent apply, and best-effort Plexamp/Plex Web links.
 - Added a transfer queue for retained staging directories after transfer

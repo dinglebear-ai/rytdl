@@ -46,6 +46,8 @@ jobs:
           sudo apt-get install -y jq shellcheck
       - name: Validate plugin packaging
         run: REQUIRE_SHELLCHECK=1 scripts/check-packaging.sh
+      - name: Validate TOOTIE Compose deployment
+        run: scripts/check-tootie-compose.sh
 
   npm-launcher:
     runs-on: ci-pool-typescript

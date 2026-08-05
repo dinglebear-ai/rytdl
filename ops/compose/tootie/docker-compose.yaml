@@ -1,0 +1,40 @@
+services:
+  ytdl-mcp:
+    image: ghcr.io/dinglebear-ai/rytdl:main
+    container_name: ytdl-mcp
+    restart: unless-stopped
+    init: true
+    user: "99:100"
+    entrypoint: ["/bin/sh", "-lc"]
+    command: ["sleep infinity"]
+    env_file:
+      - .env
+    environment:
+      HOME: /state
+      XDG_CACHE_HOME: /cache
+      XDG_STATE_HOME: /state
+      YTDLP_STAGING_DIR: /tmp/ytdl-rmcp
+      YTDLP_HISTORY_PATH: /state/downloads.jsonl
+      YTDLP_ARCHIVE_DIR: /state/archive
+      FPCALC_PATH: /usr/bin/fpcalc
+      FFMPEG_PATH: /usr/bin/ffmpeg
+    volumes:
+      - ${MUSIC_LIBRARY_PATH:-/mnt/user/data/media/music/yt-dlp}:/library:rw
+      - ${APPDATA_PATH:-/mnt/cache/appdata}/ytdl-mcp/state:/state:rw
+      - ${APPDATA_PATH:-/mnt/cache/appdata}/ytdl-mcp/cache:/cache:rw
+    networks:
+      - jakenet
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    mem_limit: 2g
+    labels:
+      net.unraid.docker.managed: composeman
+      net.unraid.docker.icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/youtube-dl.png
+      net.unraid.docker.shell: ""
+
+networks:
+  jakenet:
+    external: true
