@@ -385,11 +385,11 @@ yourself:
 
 ```bash
 # Claude Code
-claude mcp add -s user @dinglebear/rytdl -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y @dinglebear/rytdl
+claude mcp add -s user @dinglebear/rytdl -e YTDLP_TARGET_PATH=nashost:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y @dinglebear/rytdl
 # Codex
-codex  mcp add --env YTDLP_TARGET_PATH=tootie:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android @dinglebear/rytdl -- npx -y @dinglebear/rytdl
+codex  mcp add --env YTDLP_TARGET_PATH=nashost:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android @dinglebear/rytdl -- npx -y @dinglebear/rytdl
 # Gemini CLI (command is positional, env last)
-gemini mcp add -s user @dinglebear/rytdl npx -y @dinglebear/rytdl -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
+gemini mcp add -s user @dinglebear/rytdl npx -y @dinglebear/rytdl -e YTDLP_TARGET_PATH=nashost:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
 ```
 
 If you already installed a standalone binary with `npm i -g @dinglebear/rytdl`,
@@ -406,8 +406,8 @@ YouTube extractor override:
       "command": "npx",
       "args": ["-y", "ytdl-rmcp"],
       "env": {
-        "YTDLP_TARGET_PATH": "tootie:/mnt/user/data/media/music/yt-dlp",
-        "YTDLP_VIDEO_TARGET_PATH": "tootie:/mnt/user/data/media/movies/yt-dlp",
+        "YTDLP_TARGET_PATH": "nashost:/mnt/user/data/media/music/yt-dlp",
+        "YTDLP_VIDEO_TARGET_PATH": "nashost:/mnt/user/data/media/movies/yt-dlp",
         "YTDLP_AUTO_UPDATE": "1",
         "YTDLP_MAX_AGE_DAYS": "1",
         "YTDLP_EXTRACTOR_ARGS": "youtube:player_client=android"
@@ -599,7 +599,7 @@ cargo install cargo-xwin
 cargo xwin build --release --target x86_64-pc-windows-msvc
 ```
 
-On dookie/local shells, `~/.local/bin/cargo` is a wrapper that can break
+On nashost/local shells, `~/.local/bin/cargo` is a wrapper that can break
 `cargo xwin`; use the real rustup cargo for local Windows rehearsals:
 
 ```bash

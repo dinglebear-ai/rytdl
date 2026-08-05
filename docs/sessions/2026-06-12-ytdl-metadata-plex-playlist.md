@@ -17,12 +17,12 @@ Make ytdl-rmcp automatically add downloaded tracks to the Plex playlist containi
 
 ## Session Overview
 
-This session created the Plex audio playlist `yt-dlp Downloads`, populated it with all 118 currently indexed yt-dlp audio tracks from tootie, added automatic default playlist targeting to ytdl-rmcp, preserved richer yt-dlp sidecar metadata, added default-on title metadata cleanup, and documented the recommended MusicBrainz/AcoustID retagging path.
+This session created the Plex audio playlist `yt-dlp Downloads`, populated it with all 118 currently indexed yt-dlp audio tracks from nashost, added automatic default playlist targeting to ytdl-rmcp, preserved richer yt-dlp sidecar metadata, added default-on title metadata cleanup, and documented the recommended MusicBrainz/AcoustID retagging path.
 
 ## Sequence of Events
 
 1. Inspected current ytdl-rmcp logs and archive state, confirming `downloads.jsonl` was new and `archive-audio.txt` contained yt-dlp archive IDs without per-item timestamps.
-2. Inventoried tootie's yt-dlp music folder and Plex library section `9`, then created and populated the Plex playlist `yt-dlp Downloads` with 118 tracks.
+2. Inventoried nashost's yt-dlp music folder and Plex library section `9`, then created and populated the Plex playlist `yt-dlp Downloads` with 118 tracks.
 3. Added ytdl-rmcp default playlist behavior so Plex URL/token imply `yt-dlp Downloads` unless overridden.
 4. Added sidecar metadata preservation and playlist-title album parsing to yt-dlp arguments.
 5. Added configurable title metadata cleanup via `YTDLP_CLEAN_METADATA`, defaulting on, plus docs and tests.
@@ -32,7 +32,7 @@ This session created the Plex audio playlist `yt-dlp Downloads`, populated it wi
 ## Key Findings
 
 - Plex library section `9` (`nugs.net`) indexes `/data/music`, including `/data/music/yt-dlp`.
-- The existing yt-dlp folder on tootie is `/mnt/user/data/media/music/yt-dlp`, and Plex read-back showed 118 playlist items after population.
+- The existing yt-dlp folder on nashost is `/mnt/user/data/media/music/yt-dlp`, and Plex read-back showed 118 playlist items after population.
 - `YTDLP_PLEX_URL` and `YTDLP_PLEX_TOKEN` are sufficient for the new default playlist behavior; `YTDLP_PLEX_PLAYLIST` still overrides the target.
 - `fpcalc` is not installed on this host, so AcoustID fingerprinting needs either bootstrap/download support or an in-process Rust fingerprinting path.
 - There is no beads database in this repo (`bd` reported no beads database found), and no `docs/plans` files were present.
@@ -95,7 +95,7 @@ The save-to-md maintenance pass was constrained to read-only checks and document
 
 ## Tools and Skills Used
 
-- Shell commands: repo inspection, Plex API calls, tootie SSH inventory, Cargo verification, version sync, and git operations.
+- Shell commands: repo inspection, Plex API calls, nashost SSH inventory, Cargo verification, version sync, and git operations.
 - Skills: `vibin:yt-dlp`, `arrs:plex`, `vibin:quick-push`, and `vibin:save-to-md` workflow guidance.
 - Web research: MusicBrainz API, AcoustID web service, and crate discovery for `musicbrainz_rs`, Chromaprint, and tag-writing options.
 - External CLIs: `cargo`, `yt-dlp`, `ssh`, `curl`, `jq`, `rg`, `bd`, and `gh`.
@@ -104,7 +104,7 @@ The save-to-md maintenance pass was constrained to read-only checks and document
 
 | command | result |
 | --- | --- |
-| `ssh tootie 'find /mnt/user/data/media/music/yt-dlp ...'` | Found 118 files under the real yt-dlp music folder. |
+| `ssh nashost 'find /mnt/user/data/media/music/yt-dlp ...'` | Found 118 files under the real yt-dlp music folder. |
 | Plex playlist creation/update script | Created `yt-dlp Downloads` playlist id `822064` and added 118 items. |
 | `cargo test` | Passed 62 tests after metadata cleanup work. |
 | `cargo clippy --all-targets -- -D warnings` | Passed. |
@@ -115,7 +115,7 @@ The save-to-md maintenance pass was constrained to read-only checks and document
 
 ## Errors Encountered
 
-- A broad tootie media scan was too slow and was narrowed to known yt-dlp paths.
+- A broad nashost media scan was too slow and was narrowed to known yt-dlp paths.
 - Python Plex API requests initially returned 403 until a normal User-Agent was set.
 - A first targeted Cargo test command used two filters, which Cargo rejected; the full test suite was then run successfully.
 - An earlier assistant response prematurely stopped after branch creation; the quick-push continued from the created branch.

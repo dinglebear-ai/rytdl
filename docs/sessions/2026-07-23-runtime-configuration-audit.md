@@ -17,12 +17,12 @@ Verify every Rust project's environment/configuration setup and whether credenti
 
 ## Session Overview
 
-rytdl was inspected as a special env-only service. Its deployed ytdl-mcp runtime on tootie is healthy and receives active configuration through its plugin/LABBY deployment surface; no repo or runtime configuration change was required.
+rytdl was inspected as a special env-only service. Its deployed ytdl-mcp runtime on nashost is healthy and receives active configuration through its plugin/LABBY deployment surface; no repo or runtime configuration change was required.
 
 ## Sequence of Events
 
 1. Read rytdl project instructions and config references.
-2. Inspected the tootie container environment and deployment labels without exposing values.
+2. Inspected the nashost container environment and deployment labels without exposing values.
 3. Verified the ytdl-mcp container and LABBY connection.
 
 ## Key Findings
@@ -61,7 +61,7 @@ No bead activity observed for rytdl.
 
 | command | result |
 |---|---|
-| `ssh tootie docker inspect ytdl-mcp` | Deployment env/labels inspected |
+| `ssh nashost docker inspect ytdl-mcp` | Deployment env/labels inspected |
 | `docker inspect ... health` | Container healthy |
 
 ## Behavior Changes (Before/After)
@@ -75,7 +75,7 @@ No bead activity observed for rytdl.
 
 | command | expected | actual | status |
 |---|---|---|---|
-| Tootie container health | Healthy | Healthy | pass |
+| Nashost container health | Healthy | Healthy | pass |
 | LABBY upstream state | Connected | Connected | pass |
 
 ## Decisions Not Taken

@@ -11,20 +11,20 @@ worktree: /home/jmagar/workspace/ytdl-rmcp fb15ce8 [codex/metadata-playlist-sync
 
 ## User Request
 
-Deploy the container on tootie, fix the existing downloaded library metadata,
+Deploy the container on nashost, fix the existing downloaded library metadata,
 and make future downloads automatically write better MusicBrainz/AcoustID
 metadata when possible.
 
 ## Session Overview
 
-This session containerized `ytdl-rmcp`, deployed it to tootie under
+This session containerized `ytdl-rmcp`, deployed it to nashost under
 `/mnt/cache/compose/ytdl-rmcp`, repaired metadata for the existing yt-dlp music
 library, added automatic high-confidence AcoustID/MusicBrainz retagging after
 future audio downloads, and bumped the project version from `0.6.0` to `0.7.0`.
 
 ## Sequence of Events
 
-1. Built and deployed a Docker Compose stack on tootie using the local
+1. Built and deployed a Docker Compose stack on nashost using the local
    `ytdl-rmcp:local` image, with `/library`, `/state`, and `/cache` mounts.
 2. Ran `youtube_identify` against the existing `/library` contents through
    `mcporter` and wrote high-confidence MusicBrainz tags to 103 of 118 files.
@@ -36,8 +36,8 @@ future audio downloads, and bumped the project version from `0.6.0` to `0.7.0`.
    fail the download.
 5. Added a GitHub workflow for publishing the container image on pushes to
    `main`, updated container and metadata docs, and refreshed the deployed
-   tootie container after rebuilds.
-6. Verified the MCP stdio wrapper on tootie with `mcporter`, checked the Plex
+   nashost container after rebuilds.
+6. Verified the MCP stdio wrapper on nashost with `mcporter`, checked the Plex
    playlist count, and triggered a Plex library refresh for section `9`.
 7. Ran quick-push preparation: bumped version `0.6.0` to `0.7.0`, ran
    `cargo check`, and verified remaining `0.6.0` hits were historical session
@@ -47,7 +47,7 @@ future audio downloads, and bumped the project version from `0.6.0` to `0.7.0`.
 
 - The deployed stdio wrapper is `/mnt/cache/compose/ytdl-rmcp/mcp-stdio.sh`, and
   `mcporter` can list and call the server through it.
-- The tootie yt-dlp music library has 118 audio files, and the Plex playlist
+- The nashost yt-dlp music library has 118 audio files, and the Plex playlist
   `yt-dlp Downloads` also reports 118 items.
 - `fpcalc` EOF warnings are recoverable when stdout includes both `DURATION`
   and `FINGERPRINT`; treating the nonzero exit as fatal hid valid matches.
@@ -137,10 +137,10 @@ download retagging.
 - **Skills.** `vibin:repo-status`, `vibin:quick-push`,
   `testing:mcporter`, `arrs:plex`, and `superpowers:test-driven-development`.
 - **Shell commands.** Git status/diff, Cargo verification, Docker build/load,
-  SSH commands on tootie, Plex helper calls, and `mcporter` MCP smoke tests.
+  SSH commands on nashost, Plex helper calls, and `mcporter` MCP smoke tests.
 - **MCP tooling.** `mcporter` listed and called the deployed stdio server through
-  the tootie wrapper.
-- **Container tooling.** Docker built the local image, transferred it to tootie,
+  the nashost wrapper.
+- **Container tooling.** Docker built the local image, transferred it to nashost,
   and recreated the Compose service.
 - **Plex tooling.** The Plex helper listed libraries, checked the playlist, and
   triggered a refresh of section `9`.
@@ -150,10 +150,10 @@ download retagging.
 | command | result |
 | --- | --- |
 | `docker build -t ytdl-rmcp:local .` | Built the local container image. |
-| `docker save ytdl-rmcp:local \| gzip \| ssh tootie 'gunzip \| docker load'` | Loaded rebuilt images on tootie. |
-| `ssh tootie 'cd /mnt/cache/compose/ytdl-rmcp && docker compose up -d --force-recreate'` | Recreated the deployed container. |
-| `mcporter list --stdio ssh --stdio-arg tootie --stdio-arg /mnt/cache/compose/ytdl-rmcp/mcp-stdio.sh --schema --json` | MCP schema listed successfully. |
-| `mcporter call --stdio ssh --stdio-arg tootie --stdio-arg /mnt/cache/compose/ytdl-rmcp/mcp-stdio.sh youtube_stats limit:1 response_format:json` | Deployed MCP call succeeded. |
+| `docker save ytdl-rmcp:local \| gzip \| ssh nashost 'gunzip \| docker load'` | Loaded rebuilt images on nashost. |
+| `ssh nashost 'cd /mnt/cache/compose/ytdl-rmcp && docker compose up -d --force-recreate'` | Recreated the deployed container. |
+| `mcporter list --stdio ssh --stdio-arg nashost --stdio-arg /mnt/cache/compose/ytdl-rmcp/mcp-stdio.sh --schema --json` | MCP schema listed successfully. |
+| `mcporter call --stdio ssh --stdio-arg nashost --stdio-arg /mnt/cache/compose/ytdl-rmcp/mcp-stdio.sh youtube_stats limit:1 response_format:json` | Deployed MCP call succeeded. |
 | `cargo fmt --all --check` | Passed. |
 | `cargo test` | Passed, 75 tests. |
 | `cargo clippy --all-targets -- -D warnings` | Passed. |
@@ -174,7 +174,7 @@ download retagging.
 
 | area | before | after |
 | --- | --- | --- |
-| Container deployment | No Compose stack for ytdl-rmcp on tootie. | Compose stack runs at `/mnt/cache/compose/ytdl-rmcp`. |
+| Container deployment | No Compose stack for ytdl-rmcp on nashost. | Compose stack runs at `/mnt/cache/compose/ytdl-rmcp`. |
 | Existing metadata | yt-dlp library relied mostly on YouTube-derived tags. | 103 of 118 files have MusicBrainz/AcoustID-backed tags. |
 | Future downloads | MusicBrainz retagging required an explicit `youtube_identify` call. | `youtube_download` auto-retags downloaded audio before transfer when AcoustID is configured. |
 | fpcalc warnings | Nonzero `fpcalc` status blocked otherwise valid fingerprints. | Valid `DURATION` and `FINGERPRINT` stdout is accepted. |
@@ -197,7 +197,7 @@ download retagging.
 - MusicBrainz/AcoustID matching is network-dependent and rate-limited. Roll back
   by unsetting `YTDLP_ACOUSTID_CLIENT_KEY` or reverting the auto-retag commit.
 - Tag writes are best-effort, but they do mutate audio files. Existing files
-  already retagged on tootie would need restore from backups or re-downloads for
+  already retagged on nashost would need restore from backups or re-downloads for
   a full metadata rollback.
 - The deployed Compose stack currently uses the locally loaded `ytdl-rmcp:local`
   image until the GHCR workflow publishes from `main`.
@@ -218,13 +218,13 @@ download retagging.
 
 ## Open Questions
 
-- Whether to switch tootie Compose from `ytdl-rmcp:local` to
+- Whether to switch nashost Compose from `ytdl-rmcp:local` to
   `ghcr.io/jmagar/rytdl:main` after the main-branch workflow publishes.
 
 ## Next Steps
 
 1. Commit and push the feature changes after this session artifact is saved.
-2. After merge to `main`, confirm the GHCR image publishes and update tootie
+2. After merge to `main`, confirm the GHCR image publishes and update nashost
    Compose to use the published image if desired.
 3. Download a fresh track through `youtube_download` and confirm the response
    includes `metadata_retag` with the expected counts.

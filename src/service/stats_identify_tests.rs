@@ -39,8 +39,8 @@ fn run_stats_json_summarizes_history_and_recent_entries() {
     std::fs::write(
         &history,
         concat!(
-            "{\"timestamp\":\"2026-06-11T01:00:00Z\",\"mode\":\"audio\",\"remote\":\"tootie\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"files\":[{\"kind\":\"audio\",\"bytes\":10}]}]}\n",
-            "{\"timestamp\":\"2026-06-11T02:00:00Z\",\"mode\":\"video\",\"remote\":\"tootie\",\"transferred\":true,\"total_files\":2,\"total_bytes\":50,\"items\":[{\"status\":\"ok\",\"title\":\"Video B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"video\",\"bytes\":30},{\"kind\":\"audio\",\"bytes\":20}]}]}\n"
+            "{\"timestamp\":\"2026-06-11T01:00:00Z\",\"mode\":\"audio\",\"remote\":\"nashost\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"files\":[{\"kind\":\"audio\",\"bytes\":10}]}]}\n",
+            "{\"timestamp\":\"2026-06-11T02:00:00Z\",\"mode\":\"video\",\"remote\":\"nashost\",\"transferred\":true,\"total_files\":2,\"total_bytes\":50,\"items\":[{\"status\":\"ok\",\"title\":\"Video B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"video\",\"bytes\":30},{\"kind\":\"audio\",\"bytes\":20}]}]}\n"
         ),
     )
     .unwrap();
@@ -81,9 +81,9 @@ fn run_stats_json_skips_malformed_lines_and_counts_uploader_calls_once() {
     std::fs::write(
         &history,
         concat!(
-            "{\"timestamp\":\"2026-06-11T01:00:00Z\",\"mode\":\"audio\",\"remote\":\"tootie\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"files\":[{\"kind\":\"audio\",\"bytes\":10}]}]}\n",
+            "{\"timestamp\":\"2026-06-11T01:00:00Z\",\"mode\":\"audio\",\"remote\":\"nashost\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"files\":[{\"kind\":\"audio\",\"bytes\":10}]}]}\n",
             "this is not json\n",
-            "{\"timestamp\":\"2026-06-11T02:00:00Z\",\"mode\":\"both\",\"remote\":\"tootie\",\"transferred\":true,\"total_files\":3,\"total_bytes\":55,\"items\":[{\"status\":\"ok\",\"title\":\"Video B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"video\",\"bytes\":30},{\"kind\":\"audio\",\"bytes\":20}]},{\"status\":\"ok\",\"title\":\"Clip B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"audio\",\"bytes\":5}]}]}\n"
+            "{\"timestamp\":\"2026-06-11T02:00:00Z\",\"mode\":\"both\",\"remote\":\"nashost\",\"transferred\":true,\"total_files\":3,\"total_bytes\":55,\"items\":[{\"status\":\"ok\",\"title\":\"Video B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"video\",\"bytes\":30},{\"kind\":\"audio\",\"bytes\":20}]},{\"status\":\"ok\",\"title\":\"Clip B\",\"uploader\":\"Artist B\",\"files\":[{\"kind\":\"audio\",\"bytes\":5}]}]}\n"
         ),
     )
     .unwrap();
