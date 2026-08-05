@@ -13,16 +13,16 @@ fn sample_envs() -> Vec<(String, String)> {
 #[test]
 fn registration_envs_include_required_download_and_extractor_defaults() {
     assert_eq!(
-        registration_envs("tootie:/music".into(), "tootie:/movies".into()),
+        registration_envs("nashost:/music".into(), "nashost:/movies".into()),
         vec![
-            ("YTDLP_TARGET_PATH".to_string(), "tootie:/music".to_string()),
+            ("YTDLP_TARGET_PATH".to_string(), "nashost:/music".to_string()),
             (
                 "YTDLP_EXTRACTOR_ARGS".to_string(),
                 "youtube:player_client=android".to_string(),
             ),
             (
                 "YTDLP_VIDEO_TARGET_PATH".to_string(),
-                "tootie:/movies".to_string(),
+                "nashost:/movies".to_string(),
             ),
         ]
     );
@@ -30,7 +30,7 @@ fn registration_envs_include_required_download_and_extractor_defaults() {
 
 #[test]
 fn registration_envs_omit_blank_video_destination() {
-    let envs = registration_envs("tootie:/music".into(), "   ".into());
+    let envs = registration_envs("nashost:/music".into(), "   ".into());
     assert!(!envs.iter().any(|(key, _)| key == "YTDLP_VIDEO_TARGET_PATH"));
     assert!(envs.iter().any(|(key, value)| {
         key == "YTDLP_EXTRACTOR_ARGS" && value == "youtube:player_client=android"
