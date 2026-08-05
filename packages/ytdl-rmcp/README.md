@@ -435,6 +435,7 @@ extraction.
 | MCP App | `youtube_search_ui` | Embedded search widget plus normal fallback tool output. |
 | Bundle | `mcpb/manifest.json` | Binary MCPB/DXT package for desktop hosts that support bundles. |
 | Container | `ghcr.io/dinglebear-ai/rytdl:main` | Includes ffmpeg, fpcalc, SSH, rclone, and rsync for shared deployments. |
+| TOOTIE persistent runtime | `ops/compose/tootie/` | Product-owned Compose declaration; sessions enter the long-lived container over stdio with `mcp-stdio.sh`. |
 
 ## Distribution Contract
 

@@ -1,7 +1,7 @@
 ---
 title: "Container Runtime"
 created: 2026-06-12
-updated: 2026-07-30
+updated: 2026-08-05
 ---
 
 # Container Runtime
@@ -17,6 +17,28 @@ fingerprinting, tagging, and transfer workflows:
 - CA certificates
 
 The server still runs MCP over stdio by default.
+
+## Product-owned TOOTIE deployment
+
+The supported persistent TOOTIE runtime declaration lives at:
+
+```text
+ops/compose/tootie/docker-compose.yaml
+```
+
+It deliberately overrides the image entrypoint with `sleep infinity`, retaining the container as a stable environment containing RYTDL, yt-dlp bootstrap state, ffmpeg, fpcalc, SSH, rclone, rsync, and mounted media. Each MCP session is started independently over stdio with:
+
+```bash
+ops/compose/tootie/mcp-stdio.sh
+```
+
+The helper runs `docker exec -i ytdl-mcp ytdl-rmcp serve`; it allocates no TTY and exposes no HTTP port. The current live deployment remains at `tootie:/mnt/user/compose/ytdl-mcp` until an explicit reviewed deploy/sync copies the product-owned declaration there.
+
+Validate the declaration with:
+
+```bash
+scripts/check-tootie-compose.sh
+```
 
 ## Build
 
