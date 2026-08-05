@@ -89,10 +89,15 @@ jobs:
         with:
           ref: ${{ needs.release-meta.outputs.tag_name }}
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable (2026-03-27)
+      - name: Install Rust and kache
+        uses: ./.github/actions/setup-rust-kache
         with:
           targets: ${{ matrix.target }}
+          s3-access-key: ${{ secrets.KACHE_S3_ACCESS_KEY }}
+          s3-secret-key: ${{ secrets.KACHE_S3_SECRET_KEY }}
+          s3-endpoint: ${{ vars.KACHE_S3_ENDPOINT }}
+          s3-bucket: ${{ vars.KACHE_S3_BUCKET }}
+          s3-prefix: ${{ vars.KACHE_S3_PREFIX }}
 
       - name: Ensure Windows target is installed for the active toolchain
         if: matrix.target == 'x86_64-pc-windows-msvc'
@@ -110,11 +115,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nasm llvm clang lld
           cargo install cargo-xwin --locked
-
-      - name: Cache cargo
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2 (v2.9.1)
-        with:
-          key: ${{ matrix.target }}
 
       - name: Build (linux)
         if: matrix.target == 'x86_64-unknown-linux-gnu'
@@ -284,5 +284,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Rust and kache
         uses: ./.github/actions/setup-rust-kache
+        with:
+          s3-access-key: ${{ secrets.KACHE_S3_ACCESS_KEY }}
+          s3-secret-key: ${{ secrets.KACHE_S3_SECRET_KEY }}
+          s3-endpoint: ${{ vars.KACHE_S3_ENDPOINT }}
+          s3-bucket: ${{ vars.KACHE_S3_BUCKET }}
+          s3-prefix: ${{ vars.KACHE_S3_PREFIX }}
       - run: cargo test --all --locked
       - run: cargo clippy --all-targets --locked -- -D warnings
