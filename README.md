@@ -600,7 +600,7 @@ cargo install cargo-xwin
 cargo xwin build --release --target x86_64-pc-windows-msvc
 ```
 
-On nashost/local shells, `~/.local/bin/cargo` is a wrapper that can break
+On devhost/local shells, `~/.local/bin/cargo` is a wrapper that can break
 `cargo xwin`; use the real rustup cargo for local Windows rehearsals:
 
 ```bash

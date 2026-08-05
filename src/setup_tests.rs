@@ -15,7 +15,10 @@ fn registration_envs_include_required_download_and_extractor_defaults() {
     assert_eq!(
         registration_envs("nashost:/music".into(), "nashost:/movies".into()),
         vec![
-            ("YTDLP_TARGET_PATH".to_string(), "nashost:/music".to_string()),
+            (
+                "YTDLP_TARGET_PATH".to_string(),
+                "nashost:/music".to_string()
+            ),
             (
                 "YTDLP_EXTRACTOR_ARGS".to_string(),
                 "youtube:player_client=android".to_string(),
