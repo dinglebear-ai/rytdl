@@ -31,9 +31,9 @@ pub struct Tools {
 }
 
 /// This app's per-user directories (cache/state/…). Single source of the
-/// `tv/tootie/ytdl-rmcp` identity.
+/// `tv/nashost/ytdl-rmcp` identity.
 pub fn project_dirs() -> Option<ProjectDirs> {
-    ProjectDirs::from("tv", "tootie", "ytdl-rmcp")
+    ProjectDirs::from("tv", "nashost", "ytdl-rmcp")
 }
 
 /// Per-user cache dir holding downloaded binaries (`<cache>/bin`).
