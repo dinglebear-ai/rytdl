@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   failures, with list/retry/retry-all/prune actions.
 - Extended the MCP app with Playlist and Transfers tabs.
 
+
+### Licensing
+
+- Relicense Dinglebear-owned original work under AGPL-3.0-only and document separate commercial licensing; third-party material retains its original terms.
+
 ## [1.0.1](https://github.com/jmagar/rytdl/compare/v1.0.0...v1.0.1) (2026-07-11)
 
 
@@ -87,6 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embed the build's git SHA in `server_info`.
 
 ### Changed
+
 
 - Deprecated `YTDLP_REMOTE` + `YTDLP_REMOTE_PATH` and the matching per-call
   `remote` / `dest_path` inputs in favor of target paths, while retaining
