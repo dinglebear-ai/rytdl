@@ -15,7 +15,7 @@ description = "yt-dlp search, download, metadata, delivery, and Plex workflows o
 
 [workspace.dependencies]
 rmcp = { version = "=3.1.0", default-features = false }
-schemars = "=1.2.1"
+schemars = "=1.2.2"
 
 [workspace.lints.clippy]
 all = { level = "warn", priority = -1 }
