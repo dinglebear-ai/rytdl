@@ -404,7 +404,7 @@ YouTube extractor override:
   "mcpServers": {
     "ytdl-rmcp": {
       "command": "npx",
-      "args": ["-y", "ytdl-rmcp"],
+      "args": ["-y", "@dinglebear/rytdl"],
       "env": {
         "YTDLP_TARGET_PATH": "tootie:/mnt/user/data/media/music/yt-dlp",
         "YTDLP_VIDEO_TARGET_PATH": "tootie:/mnt/user/data/media/movies/yt-dlp",

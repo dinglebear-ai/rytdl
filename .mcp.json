@@ -181,7 +181,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "ytdl-rmcp"
+        "@dinglebear/rytdl"
       ],
       "env": {
         "YTDLP_TARGET_PATH": "${user_config.target_path}",

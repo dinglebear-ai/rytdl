@@ -32,6 +32,14 @@ for file in "${json_files[@]}"; do
 done
 log "JSON syntax ok"
 
+expected_npm_package="@dinglebear/rytdl"
+jq -e --arg package "$expected_npm_package" '
+  .mcpServers."ytdl-rmcp"
+  | .command == "npx" and .args == ["-y", $package]
+' .mcp.json >/dev/null \
+  || fail ".mcp.json must launch npx -y $expected_npm_package"
+log "Claude plugin npm launcher ok"
+
 shell_scripts=()
 while IFS= read -r -d '' file; do
   shell_scripts+=("$file")
