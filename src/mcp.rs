@@ -270,7 +270,7 @@ impl YtdlServer {
         name = "youtube_plex_playlist",
         description = "List successful transferred audio history candidates, preview Plex playlist matches, or apply an idempotent Plex playlist update.",
         meta = search_app::tool_meta(),
-        output_schema = rmcp::handler::server::tool::schema_for_type::<serde_json::Value>()
+        output_schema = rmcp::handler::server::tool::schema_for_type::<serde_json::Map<String, serde_json::Value>>()
     )]
     async fn youtube_plex_playlist(
         &self,
@@ -301,7 +301,7 @@ impl YtdlServer {
         name = "youtube_transfer_queue",
         description = "List, retry, retry all, or prune retained-staging transfer failure manifests by opaque manifest ID.",
         meta = search_app::tool_meta(),
-        output_schema = rmcp::handler::server::tool::schema_for_type::<serde_json::Value>()
+        output_schema = rmcp::handler::server::tool::schema_for_type::<serde_json::Map<String, serde_json::Value>>()
     )]
     async fn youtube_transfer_queue(
         &self,
