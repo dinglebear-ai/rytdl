@@ -88,6 +88,11 @@ fn app_backed_tools_advertise_metadata_and_output_schema() {
             tool.output_schema.is_some(),
             "{name} should advertise output"
         );
+        assert_eq!(
+            tool.output_schema.as_ref().unwrap()["type"],
+            serde_json::json!("object"),
+            "{name} output schema must have an object root"
+        );
     }
 }
 
