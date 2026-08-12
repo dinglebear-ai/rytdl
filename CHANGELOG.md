@@ -5,6 +5,26 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/dinglebear-ai/rytdl/compare/v1.0.4...v1.1.0) (2026-08-12)
+
+
+### Added
+
+* own TOOTIE Compose deployment ([c5c194d](https://github.com/dinglebear-ai/rytdl/commit/c5c194d752582dabc507b4fba6de9eb3a5d84b9b))
+* **release:** publish canonical MCP Registry metadata ([#58](https://github.com/dinglebear-ai/rytdl/issues/58)) ([6f8762c](https://github.com/dinglebear-ai/rytdl/commit/6f8762cc7d81fcdd6b03f783ca291513bd67956e))
+
+
+### Fixed
+
+* **ci:** preserve existing Kache config ([#55](https://github.com/dinglebear-ai/rytdl/issues/55)) ([2dc72db](https://github.com/dinglebear-ai/rytdl/commit/2dc72db9de0b5eb191a773c977cfb7e6286ab82a))
+* install Windows target for release builds ([#56](https://github.com/dinglebear-ai/rytdl/issues/56)) ([2c8bf68](https://github.com/dinglebear-ai/rytdl/commit/2c8bf688f1f607c86f37d908884e1e2c54edf0cc))
+* **mcp:** advertise object output schemas ([#67](https://github.com/dinglebear-ai/rytdl/issues/67)) ([edc7108](https://github.com/dinglebear-ai/rytdl/commit/edc7108fa9094de0499c7fa62989ef3138a4cd6b))
+* **mcp:** use DNS-only Registry publisher ([#60](https://github.com/dinglebear-ai/rytdl/issues/60)) ([fa16f50](https://github.com/dinglebear-ai/rytdl/commit/fa16f506c213663c62e6f97f394ebf1e704e4f2b))
+* **plugin:** use published rytdl npm package ([#66](https://github.com/dinglebear-ai/rytdl/issues/66)) ([0442c7a](https://github.com/dinglebear-ai/rytdl/commit/0442c7a2d2f5f892b4f99f7e75b1ce99b6139ffa))
+* **release:** keep Cargo.lock version synchronized ([#70](https://github.com/dinglebear-ai/rytdl/issues/70)) ([a5f34a3](https://github.com/dinglebear-ai/rytdl/commit/a5f34a341a6a45aac53bdccf63880a87ae0a20e5))
+* **release:** update inherited workspace version ([#68](https://github.com/dinglebear-ai/rytdl/issues/68)) ([1d71c99](https://github.com/dinglebear-ai/rytdl/commit/1d71c993e109981cec26ba241320c7818f8cff75))
+* **release:** update lockfile through cargo workspace ([#71](https://github.com/dinglebear-ai/rytdl/issues/71)) ([c2c3296](https://github.com/dinglebear-ai/rytdl/commit/c2c3296f2bc4ec19e3e623b08170881c56df7076))
+
 ## [1.0.4](https://github.com/dinglebear-ai/rytdl/compare/v1.0.3...v1.0.4) (2026-08-01)
 
 ### Fixed
