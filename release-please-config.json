@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-  "release-type": "rust",
+  "release-type": "simple",
   "include-v-in-tag": true,
   "include-component-in-tag": false,
   "always-update": true,
@@ -67,7 +67,17 @@
       "component": "@dinglebear/rytdl",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
+        {
+          "type": "toml",
+          "path": "Cargo.toml",
+          "jsonpath": "$.workspace.package.version"
+        },
         "packages/ytdl-rmcp/package.json",
+        {
+          "type": "json",
+          "path": "packages/ytdl-rmcp/package.json",
+          "jsonpath": "$.binaryVersion"
+        },
         "gemini-extension.json",
         "mcpb/manifest.json",
         {
