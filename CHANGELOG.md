@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1](https://github.com/dinglebear-ai/rytdl/compare/v1.1.0...v1.1.1) (2026-08-12)
+
+
+### Fixed
+
+* **release:** publish npm through trusted OIDC ([#73](https://github.com/dinglebear-ai/rytdl/issues/73)) ([7656cef](https://github.com/dinglebear-ai/rytdl/commit/7656cef11ff6c7346b072c0749254038e62afc0d))
+
 ## [1.1.0](https://github.com/dinglebear-ai/rytdl/compare/v1.0.4...v1.1.0) (2026-08-12)
 
 
