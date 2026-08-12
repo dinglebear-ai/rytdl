@@ -3,7 +3,7 @@
   "name": "ai.dinglebear/rytdl",
   "title": "YTDL RMCP",
   "description": "yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI.",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "websiteUrl": "https://rytdl.dinglebear.ai",
   "repository": {
     "url": "https://github.com/dinglebear-ai/rytdl",
@@ -25,7 +25,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@dinglebear/rytdl",
-      "version": "1.0.4",
+      "version": "1.1.0",
       "runtimeHint": "npx",
       "environmentVariables": [
         {
@@ -87,11 +87,11 @@
       "namespace": "ai.dinglebear",
       "dnsDomain": "dinglebear.ai",
       "distribution": {
-        "npm": "@dinglebear/rytdl@1.0.4",
+        "npm": "@dinglebear/rytdl@1.1.0",
         "nodePackage": "@dinglebear/rytdl"
       },
       "buildInfo": {
-        "version": "1.0.4",
+        "version": "1.1.0",
         "repository": "https://github.com/dinglebear-ai/rytdl"
       }
     }

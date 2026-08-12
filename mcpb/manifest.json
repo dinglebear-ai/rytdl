@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "ytdl-rmcp",
   "display_name": "yt-dlp Downloader",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex.",
   "long_description": "Cross-platform single-binary MCP server. Downloads media with yt-dlp, embeds metadata and cover art, organizes by artist, and transfers the result to a local path, an SSH target over rsync/scp, or an rclone target. yt-dlp and ffmpeg are auto-downloaded into a per-user cache on first run, so the bundle only ships the ytdl-rmcp binary itself.",
   "author": {
@@ -208,7 +208,7 @@
     "auto_update": {
       "type": "boolean",
       "title": "Auto-update yt-dlp",
-      "description": "Update yt-dlp at server startup when stale. Recommended on \u2014 each session relaunch self-heals against extractor breakage.",
+      "description": "Update yt-dlp at server startup when stale. Recommended on — each session relaunch self-heals against extractor breakage.",
       "default": true
     },
     "max_age_days": {
