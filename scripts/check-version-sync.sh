@@ -30,7 +30,28 @@ add_toml_version() { # path
   return 0
 }
 
+add_cargo_lock_version() { # path package
+  [ -f "$1" ] || return 0
+  local v
+  v=$(python3 - "$1" "$2" <<'PY'
+import sys
+import tomllib
+
+with open(sys.argv[1], "rb") as handle:
+    lockfile = tomllib.load(handle)
+
+for package in lockfile.get("package", []):
+    if package.get("name") == sys.argv[2]:
+        print(package.get("version", ""))
+        break
+PY
+  ) || return 0
+  [ -n "$v" ] && versions+=("$1=$v") && files_checked+=("$1")
+  return 0
+}
+
 add_toml_version "Cargo.toml"
+add_cargo_lock_version "Cargo.lock" "ytdl-rmcp"
 add_toml_version "pyproject.toml"
 add_json_version "package.json"
 
