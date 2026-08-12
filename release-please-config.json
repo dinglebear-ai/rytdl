@@ -72,6 +72,11 @@
           "path": "Cargo.toml",
           "jsonpath": "$.workspace.package.version"
         },
+        {
+          "type": "toml",
+          "path": "Cargo.lock",
+          "jsonpath": "$.package[?(@.name == 'ytdl-rmcp')].version"
+        },
         "packages/ytdl-rmcp/package.json",
         {
           "type": "json",
