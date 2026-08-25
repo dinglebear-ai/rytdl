@@ -129,9 +129,9 @@ fn target_path_accepts_local_ssh_and_rclone_targets() {
         TargetPath::Local(_)
     ));
 
-    match TargetPath::parse("dookie:/srv/music").unwrap() {
+    match TargetPath::parse("devhost:/srv/music").unwrap() {
         TargetPath::Ssh { remote, path } => {
-            assert_eq!(remote.as_str(), "dookie");
+            assert_eq!(remote.as_str(), "devhost");
             assert_eq!(path.as_str(), "/srv/music");
         }
         other => panic!("expected ssh target, got {other:?}"),
@@ -147,9 +147,9 @@ fn target_path_accepts_local_ssh_and_rclone_targets() {
         other => panic!("expected explicit rclone target, got {other:?}"),
     }
 
-    match TargetPath::parse("ssh:dookie:/srv/music").unwrap() {
+    match TargetPath::parse("ssh:devhost:/srv/music").unwrap() {
         TargetPath::Ssh { remote, path } => {
-            assert_eq!(remote.as_str(), "dookie");
+            assert_eq!(remote.as_str(), "devhost");
             assert_eq!(path.as_str(), "/srv/music");
         }
         other => panic!("expected explicit ssh target, got {other:?}"),
@@ -190,10 +190,10 @@ fn target_path_rejects_unsafe_targets() {
     assert!(TargetPath::parse("relative/path").is_err());
     assert!(TargetPath::parse("/music/../etc").is_err());
     assert!(
-        TargetPath::parse("dookie:relative").is_ok(),
+        TargetPath::parse("devhost:relative").is_ok(),
         "rclone targets may be relative to a remote"
     );
-    assert!(TargetPath::parse("dookie:/music/../etc").is_err());
+    assert!(TargetPath::parse("devhost:/music/../etc").is_err());
     assert!(TargetPath::parse("rclone:gdrive:music/../etc").is_err());
     assert!(TargetPath::parse("-bad:/music").is_err());
     assert!(TargetPath::parse("remote:\npath").is_err());
@@ -205,9 +205,9 @@ fn target_set_uses_video_target_or_falls_back_to_audio_target() {
     assert_eq!(target.audio_target().display(), "/audio");
     assert_eq!(target.video_target().display(), "remote:videos");
 
-    let target = TransferTarget::parse_targets("dookie:/audio", None).unwrap();
-    assert_eq!(target.audio_target().display(), "dookie:/audio");
-    assert_eq!(target.video_target().display(), "dookie:/audio");
+    let target = TransferTarget::parse_targets("devhost:/audio", None).unwrap();
+    assert_eq!(target.audio_target().display(), "devhost:/audio");
+    assert_eq!(target.video_target().display(), "devhost:/audio");
 }
 
 #[test]
@@ -215,7 +215,7 @@ fn target_set_reports_whether_local_paths_are_present() {
     let local = TransferTarget::parse_targets("/audio", Some("remote:videos")).unwrap();
     assert!(local.contains_local());
 
-    let remote = TransferTarget::parse_targets("dookie:/audio", Some("remote:videos")).unwrap();
+    let remote = TransferTarget::parse_targets("devhost:/audio", Some("remote:videos")).unwrap();
     assert!(!remote.contains_local());
 }
 
