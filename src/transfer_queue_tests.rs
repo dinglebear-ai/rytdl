@@ -48,7 +48,7 @@ fn record_failed_transfer_writes_manifest_with_opaque_id() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging.clone(),
-            targets: vec![("audio".to_string(), "tootie:/music".to_string())],
+            targets: vec![("audio".to_string(), "nashost:/music".to_string())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "rsync failed token=secret".to_string(),
         },
@@ -73,7 +73,7 @@ fn prune_missing_removes_only_missing_staging_entries() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging.clone(),
-            targets: vec![("audio".into(), "tootie:/music".into())],
+            targets: vec![("audio".into(), "nashost:/music".into())],
             files: vec![PathBuf::from("audio/A/B.mp3")],
             last_error: "failed".into(),
         },
@@ -116,7 +116,7 @@ async fn retry_missing_staged_kind_returns_structured_failure_and_keeps_manifest
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging.clone(),
-            targets: vec![("audio".into(), "tootie:/music".into())],
+            targets: vec![("audio".into(), "nashost:/music".into())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "failed".into(),
         },
@@ -147,7 +147,7 @@ async fn retry_missing_staging_marks_manifest_pending_not_running() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging.clone(),
-            targets: vec![("audio".into(), "tootie:/music".into())],
+            targets: vec![("audio".into(), "nashost:/music".into())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "failed".into(),
         },
@@ -184,7 +184,7 @@ async fn retry_rejects_staging_tree_that_differs_from_manifest_files() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging,
-            targets: vec![("audio".into(), "tootie:/music".into())],
+            targets: vec![("audio".into(), "nashost:/music".into())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "failed".into(),
         },
@@ -319,7 +319,7 @@ async fn retry_rejects_unsafe_manifest_file_paths() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging,
-            targets: vec![("audio".into(), "tootie:/music".into())],
+            targets: vec![("audio".into(), "nashost:/music".into())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "failed".into(),
         },

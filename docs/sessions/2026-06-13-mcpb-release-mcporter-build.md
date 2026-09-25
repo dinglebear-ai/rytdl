@@ -28,7 +28,7 @@ Late in the session, Claude Desktop failed to install the MCPB/DXT with `handleD
 3. Added Plex playlist support for downloaded audio and later made downloads auto-add tracks to the configured playlist.
 4. Improved metadata handling with title cleanup, AcoustID fingerprinting, MusicBrainz candidate lookup, high-confidence preview generation, and optional tag writing.
 5. Containerized the server with ffmpeg, fpcalc, SSH, and rsync dependencies, then added a workflow that publishes a container image on pushes to `main`.
-6. Deployed the container on tootie under `/mnt/cache/compose/ytdl-rmcp` and used it for metadata/library work.
+6. Deployed the container on nashost under `/mnt/cache/compose/ytdl-rmcp` and used it for metadata/library work.
 7. Added MCPB/DXT packaging and release automation so main pushes publish Linux, Windows, `.mcpb`, and `.dxt` assets.
 8. Investigated repeated Claude Desktop extension install failures, found an upstream MCPB/Desktop issue with the same `handleDxtFile` symptom, and patched the bundle manifest to avoid required config gates during install.
 9. Published release `v0.7.0-main.4.8d0d3530681c`, verified assets, cleaned stale branches, built the latest local binary and container, and used mcporter to smoke-test the MCP server.

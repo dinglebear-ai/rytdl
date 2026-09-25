@@ -69,7 +69,7 @@ and archives survive container restarts.
 
 ```bash
 docker run --rm -i \
-  -e YTDLP_TARGET_PATH=tootie:/mnt/user/data/media/music/yt-dlp \
+  -e YTDLP_TARGET_PATH=nashost:/mnt/user/data/media/music/yt-dlp \
   -e YTDLP_HISTORY_PATH=/home/ytdl/.local/state/ytdl-rmcp/downloads.jsonl \
   -v "$HOME/.ssh:/home/ytdl/.ssh:ro" \
   -v ytdl-rmcp-state:/home/ytdl/.local/state/ytdl-rmcp \
@@ -108,7 +108,7 @@ reviewing candidates, rerun only accepted files with `write_tags=true`.
 
 ## Batch Shape For The Existing yt-dlp Library
 
-The current yt-dlp audio library on tootie is expected at:
+The current yt-dlp audio library on nashost is expected at:
 
 ```text
 /mnt/user/data/media/music/yt-dlp

@@ -35,7 +35,7 @@ The session merged the dependency queue into `main`, added Dependabot grouping, 
 - `RawResource` and `AnnotateAble` usage no longer matched the v2 model API; `src/search_app.rs` now uses `Resource`.
 - `sha2 0.11.0` no longer allowed direct `format!("{:x}", Sha256::digest(...))` in `src/bootstrap.rs`; byte-wise hex formatting was needed.
 - Release-please originally bumped Cargo/npm versions to `1.0.1` but not Gemini/MCPB manifests; `release-please-config.json` now includes those extra files.
-- Latest `OpenWiki Update` on `main` failed after the session with `Request timed out` against `http://100.120.242.29:8317/v1`.
+- Latest `OpenWiki Update` on `main` failed after the session with `Request timed out` against `http://198.51.100.2:8317/v1`.
 
 ## Technical Decisions
 
@@ -185,12 +185,12 @@ The latest `OpenWiki Update` workflow on `main` failed after all merges with a t
 
 ## Open Questions
 
-- Why does `OpenWiki Update` time out against `http://100.120.242.29:8317/v1` after the workflow endpoint change?
+- Why does `OpenWiki Update` time out against `http://198.51.100.2:8317/v1` after the workflow endpoint change?
 - Should the repo keep the earlier individual action merges #8 and #12 as historical commits, or squash history only through normal future workflow?
 
 ## Next Steps
 
 - Investigate the failing `OpenWiki Update` workflow timeout on `main`.
-- Confirm the OpenWiki endpoint on tootie is healthy and responds within workflow time limits.
+- Confirm the OpenWiki endpoint on nashost is healthy and responds within workflow time limits.
 - On the next release cycle, verify that release-please updates `gemini-extension.json` and `mcpb/manifest.json` automatically through the new `extra-files` config.
 - Continue leaving `marketplace-no-mcp` untouched unless Jacob explicitly asks to retire or modify the no-MCP marketplace variant.

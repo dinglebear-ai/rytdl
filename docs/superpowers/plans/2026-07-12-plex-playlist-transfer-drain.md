@@ -63,9 +63,9 @@ fn playlist_candidates_include_only_transferred_audio() {
     std::fs::write(
         &history,
         concat!(
-            "{\"timestamp\":\"2026-07-12T01:00:00Z\",\"mode\":\"audio\",\"target_path\":\"tootie:/music\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"url\":\"https://youtu.be/a\",\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"duration\":12.0,\"files\":[{\"kind\":\"audio\",\"bytes\":10,\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"duration\":12.0}]}]}\n",
-            "{\"timestamp\":\"2026-07-12T01:01:00Z\",\"mode\":\"audio\",\"target_path\":\"tootie:/music\",\"transferred\":false,\"total_files\":1,\"total_bytes\":20,\"items\":[{\"url\":\"https://youtu.be/b\",\"status\":\"ok\",\"title\":\"Song B\",\"uploader\":\"Artist B\",\"video_id\":\"bbb\",\"files\":[{\"kind\":\"audio\",\"bytes\":20,\"title\":\"Song B\",\"uploader\":\"Artist B\",\"video_id\":\"bbb\"}]}]}\n",
-            "{\"timestamp\":\"2026-07-12T01:02:00Z\",\"mode\":\"video\",\"target_path\":\"tootie:/video\",\"transferred\":true,\"total_files\":1,\"total_bytes\":30,\"items\":[{\"url\":\"https://youtu.be/c\",\"status\":\"ok\",\"title\":\"Video C\",\"uploader\":\"Artist C\",\"video_id\":\"ccc\",\"files\":[{\"kind\":\"video\",\"bytes\":30,\"title\":\"Video C\",\"uploader\":\"Artist C\",\"video_id\":\"ccc\"}]}]}\n",
+            "{\"timestamp\":\"2026-07-12T01:00:00Z\",\"mode\":\"audio\",\"target_path\":\"nashost:/music\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"url\":\"https://youtu.be/a\",\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"duration\":12.0,\"files\":[{\"kind\":\"audio\",\"bytes\":10,\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"duration\":12.0}]}]}\n",
+            "{\"timestamp\":\"2026-07-12T01:01:00Z\",\"mode\":\"audio\",\"target_path\":\"nashost:/music\",\"transferred\":false,\"total_files\":1,\"total_bytes\":20,\"items\":[{\"url\":\"https://youtu.be/b\",\"status\":\"ok\",\"title\":\"Song B\",\"uploader\":\"Artist B\",\"video_id\":\"bbb\",\"files\":[{\"kind\":\"audio\",\"bytes\":20,\"title\":\"Song B\",\"uploader\":\"Artist B\",\"video_id\":\"bbb\"}]}]}\n",
+            "{\"timestamp\":\"2026-07-12T01:02:00Z\",\"mode\":\"video\",\"target_path\":\"nashost:/video\",\"transferred\":true,\"total_files\":1,\"total_bytes\":30,\"items\":[{\"url\":\"https://youtu.be/c\",\"status\":\"ok\",\"title\":\"Video C\",\"uploader\":\"Artist C\",\"video_id\":\"ccc\",\"files\":[{\"kind\":\"video\",\"bytes\":30,\"title\":\"Video C\",\"uploader\":\"Artist C\",\"video_id\":\"ccc\"}]}]}\n",
             "not-json\n"
         ),
     )
@@ -88,7 +88,7 @@ fn playlist_candidates_include_only_transferred_audio() {
 fn playlist_candidates_dedupe_on_normalized_track_identity() {
     let dir = tempfile::tempdir().unwrap();
     let history = dir.path().join("downloads.jsonl");
-    let line = "{\"timestamp\":\"2026-07-12T01:00:00Z\",\"mode\":\"audio\",\"target_path\":\"tootie:/music\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"url\":\"https://youtu.be/a\",\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"files\":[{\"kind\":\"audio\",\"bytes\":10,\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\"}]}]}\n";
+    let line = "{\"timestamp\":\"2026-07-12T01:00:00Z\",\"mode\":\"audio\",\"target_path\":\"nashost:/music\",\"transferred\":true,\"total_files\":1,\"total_bytes\":10,\"items\":[{\"url\":\"https://youtu.be/a\",\"status\":\"ok\",\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\",\"files\":[{\"kind\":\"audio\",\"bytes\":10,\"title\":\"Song A\",\"uploader\":\"Artist A\",\"video_id\":\"aaa\"}]}]}\n";
     std::fs::write(&history, format!("{line}{line}")).unwrap();
     let mut cfg = test_config();
     cfg.history_path = Some(history.display().to_string());
@@ -749,7 +749,7 @@ fn record_failed_transfer_writes_manifest_with_opaque_id() {
         &cfg,
         TransferFailureManifestInput {
             staging_path: staging.clone(),
-            targets: vec![("audio".to_string(), "tootie:/music".to_string())],
+            targets: vec![("audio".to_string(), "nashost:/music".to_string())],
             files: vec![PathBuf::from("audio/Artist/Song.mp3")],
             last_error: "rsync failed token=secret".to_string(),
         },
@@ -772,7 +772,7 @@ fn prune_missing_removes_only_missing_staging_entries() {
 
     let kept = record_failed_transfer(&cfg, TransferFailureManifestInput {
         staging_path: staging.clone(),
-        targets: vec![("audio".into(), "tootie:/music".into())],
+        targets: vec![("audio".into(), "nashost:/music".into())],
         files: vec![PathBuf::from("audio/A/B.mp3")],
         last_error: "failed".into(),
     }).unwrap();
