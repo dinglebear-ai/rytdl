@@ -1,0 +1,25 @@
+Workspace cleanup archive for dinglebear-ai/rytdl
+Date: 2026-09-25
+Default: main
+
+STALE_BRANCHES 7
+STALE	chore/rmcp3-edition2024	f5a7d49f5ea9bba5fa4f9a381c7ca35c85d27e56
+STALE	chore/scrub-internal-identifiers-20260805	64b1fa9b522d27ddec87fa7b1a6a40a2e8e3ff1d
+STALE	ci/fleet-operational-20260801	e103bd93205c1eae7110c86373f7860f3255b66a
+STALE	codex/scoped-npm-package	f5c72a02ccbf173281be5bd31a0843e69bed68d8
+STALE	fix/release-resume-windows	e25ff235ca4b1752b533847911bee46a90880810
+STALE	release-please--branches--main--components--rytdl	257018fffd04aca799339655fb44e386afde2b37
+STALE	worktree-adversarial-audit-20260818	7656cef11ff6c7346b072c0749254038e62afc0d
+
+LOCAL_ONLY_BRANCHES 7
+LOCAL_ONLY	chore/kache-0.15.1	ed97e7eea2abbf6e8fed24199bc887bd7fd3423b
+LOCAL_ONLY	chore/scrub-internal-identifiers-20260805	64b1fa9b522d27ddec87fa7b1a6a40a2e8e3ff1d
+LOCAL_ONLY	ci/hosted-kache-minio-20260805	8b171278d90cebdd2b6f092b5742aa4a45d9775e
+LOCAL_ONLY	codex/scoped-npm-package	f5c72a02ccbf173281be5bd31a0843e69bed68d8
+LOCAL_ONLY	fix/release-resume-windows	e25ff235ca4b1752b533847911bee46a90880810
+LOCAL_ONLY	main	ed97e7eea2abbf6e8fed24199bc887bd7fd3423b
+LOCAL_ONLY	release-please--branches--main--components--rytdl	257018fffd04aca799339655fb44e386afde2b37
+
+STALE_WORKTREES 0
+
+WIP_SNAPSHOTS 0
