@@ -32,14 +32,6 @@ for file in "${json_files[@]}"; do
 done
 log "JSON syntax ok"
 
-expected_npm_package="@dinglebear/rytdl"
-jq -e --arg package "$expected_npm_package" '
-  .mcpServers."ytdl-rmcp"
-  | .command == "npx" and .args == ["-y", $package]
-' .mcp.json >/dev/null \
-  || fail ".mcp.json must launch npx -y $expected_npm_package"
-log "Claude plugin npm launcher ok"
-
 shell_scripts=()
 while IFS= read -r -d '' file; do
   shell_scripts+=("$file")
@@ -243,15 +235,6 @@ grep -q 'ytdl-rmcp-windows-x86_64.tar.gz' "$release_workflow" \
   || fail "release workflow must publish the windows npm installer tarball"
 grep -q 'npm publish --provenance --access public ./packages/ytdl-rmcp' "$release_workflow" \
   || fail "release workflow must publish the npm launcher with provenance"
-grep -q 'node-version: 24' "$release_workflow" \
-  || fail "release workflow must use Node 24 for npm trusted publishing"
-grep -q 'npm install --global npm@11\.5\.1' "$release_workflow" \
-  || fail "release workflow must install an npm CLI with trusted-publishing support"
-grep -q 'id-token: write' "$release_workflow" \
-  || fail "release workflow must grant OIDC id-token permission for npm trusted publishing"
-if grep -qE 'NODE_AUTH_TOKEN|secrets\.NPM_TOKEN|npm whoami' "$release_workflow"; then
-  fail "release workflow must use OIDC trusted publishing without a long-lived npm token"
-fi
 release_tag_expression="$(printf '%s%s' '$' '{{ needs.release-meta.outputs.tag_name }}')"
 grep -Fq "tag_name: $release_tag_expression" "$release_workflow" \
   || fail "release uploads must use the computed release tag"

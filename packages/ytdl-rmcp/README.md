@@ -4,7 +4,8 @@
 [![release](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/release.yml)
 [![CI](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml/badge.svg)](https://github.com/dinglebear-ai/rytdl/actions/workflows/ci.yml)
 
-yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI.
+MCP server and CLI for yt-dlp: search and download media, embed metadata and
+cover art, then deliver to local, SSH, or rclone targets and Plex.
 
 Written in Rust on the [`rmcp`](https://crates.io/crates/rmcp) crate. **yt-dlp
 and ffmpeg are auto-downloaded** into a per-user cache on first run, so the host
@@ -385,11 +386,11 @@ yourself:
 
 ```bash
 # Claude Code
-claude mcp add -s user @dinglebear/rytdl -e YTDLP_TARGET_PATH=nashost:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y @dinglebear/rytdl
+claude mcp add -s user @dinglebear/rytdl -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android -- npx -y @dinglebear/rytdl
 # Codex
-codex  mcp add --env YTDLP_TARGET_PATH=nashost:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android @dinglebear/rytdl -- npx -y @dinglebear/rytdl
+codex  mcp add --env YTDLP_TARGET_PATH=tootie:/media/music --env YTDLP_EXTRACTOR_ARGS=youtube:player_client=android @dinglebear/rytdl -- npx -y @dinglebear/rytdl
 # Gemini CLI (command is positional, env last)
-gemini mcp add -s user @dinglebear/rytdl npx -y @dinglebear/rytdl -e YTDLP_TARGET_PATH=nashost:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
+gemini mcp add -s user @dinglebear/rytdl npx -y @dinglebear/rytdl -e YTDLP_TARGET_PATH=tootie:/media/music -e YTDLP_EXTRACTOR_ARGS=youtube:player_client=android
 ```
 
 If you already installed a standalone binary with `npm i -g @dinglebear/rytdl`,
@@ -404,10 +405,10 @@ YouTube extractor override:
   "mcpServers": {
     "ytdl-rmcp": {
       "command": "npx",
-      "args": ["-y", "@dinglebear/rytdl"],
+      "args": ["-y", "ytdl-rmcp"],
       "env": {
-        "YTDLP_TARGET_PATH": "nashost:/mnt/user/data/media/music/yt-dlp",
-        "YTDLP_VIDEO_TARGET_PATH": "nashost:/mnt/user/data/media/movies/yt-dlp",
+        "YTDLP_TARGET_PATH": "tootie:/mnt/user/data/media/music/yt-dlp",
+        "YTDLP_VIDEO_TARGET_PATH": "tootie:/mnt/user/data/media/movies/yt-dlp",
         "YTDLP_AUTO_UPDATE": "1",
         "YTDLP_MAX_AGE_DAYS": "1",
         "YTDLP_EXTRACTOR_ARGS": "youtube:player_client=android"
@@ -435,7 +436,6 @@ extraction.
 | MCP App | `youtube_search_ui` | Embedded search widget plus normal fallback tool output. |
 | Bundle | `mcpb/manifest.json` | Binary MCPB/DXT package for desktop hosts that support bundles. |
 | Container | `ghcr.io/dinglebear-ai/rytdl:main` | Includes ffmpeg, fpcalc, SSH, rclone, and rsync for shared deployments. |
-| TOOTIE persistent runtime | `ops/compose/tootie/` | Product-owned Compose declaration; sessions enter the long-lived container over stdio with `mcp-stdio.sh`. |
 
 ## Distribution Contract
 
@@ -600,7 +600,7 @@ cargo install cargo-xwin
 cargo xwin build --release --target x86_64-pc-windows-msvc
 ```
 
-On devhost/local shells, `~/.local/bin/cargo` is a wrapper that can break
+On dookie/local shells, `~/.local/bin/cargo` is a wrapper that can break
 `cargo xwin`; use the real rustup cargo for local Windows rehearsals:
 
 ```bash
@@ -709,7 +709,7 @@ manifests that `scripts/check-packaging.sh` cross-checks.
 
 ## License
 
-Original Dinglebear-authored portions of this project are licensed under [AGPL-3.0-only](LICENSE). Separate commercial licensing is available for organizations that need terms outside the AGPL. Third-party material remains under its original license. See [LICENSING.md](https://github.com/dinglebear-ai/rytdl/blob/main/LICENSING.md).
+MIT — see `LICENSE`.
 
 ## Rust MCP naming pattern
 

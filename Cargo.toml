@@ -3,15 +3,15 @@ members = ["."]
 resolver = "2"
 
 [workspace.package]
-version = "1.1.0"
+version = "1.0.4"
 edition = "2024"
 rust-version = "1.97.1"
 authors = ["dinglebear.ai <hello@dinglebear.ai>"]
-license = "AGPL-3.0-only"
+license = "MIT"
 readme = "README.md"
 homepage = "https://rytdl.dinglebear.ai"
 repository = "https://github.com/dinglebear-ai/rytdl"
-description = "yt-dlp search, download, metadata, delivery, and Plex workflows over MCP and CLI."
+description = "MCP server and CLI for yt-dlp: search and download media, embed metadata and cover art, then deliver to local, SSH, or rclone targets and Plex."
 
 [workspace.dependencies]
 rmcp = { version = "=3.1.0", default-features = false }
