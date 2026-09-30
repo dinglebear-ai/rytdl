@@ -48,3 +48,4 @@ packages/ytdl-rmcp/vendor/
 .dolt/
 *.db
 .beads-credential-key
+worktrees/
