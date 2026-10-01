@@ -94,6 +94,13 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - name: Set up pinned credentialless Rust cache
+        uses: kunobi-ninja/kache-action@ad7317540dcdd71c904f7a60a87b620a0c0e67ed
+        with:
+          version: '0.28.1'
+          github-cache: 'true'
+          max-size: '10GB'
+          pr-comment: 'false'
       - name: Ensure Windows target is installed for the active toolchain
         if: matrix.target == 'x86_64-pc-windows-msvc'
         shell: bash

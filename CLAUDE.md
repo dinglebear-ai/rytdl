@@ -144,7 +144,7 @@ invoke the real rustup cargo directly: `~/.cargo/bin/cargo xwin build …`.
   `ci.yml` (fmt/clippy/test + Windows cross-build smoke per push/PR),
   `release.yml` (linux + windows-msvc binaries + the mcpb bundle on `v*`),
   `release-please.yml`, `container.yml` (ghcr image on `main`), `audit.yml`,
-  `codeql.yml`, and `openwiki-update.yml`.
+  and `codeql.yml`.
 - **npm launcher**: `packages/ytdl-rmcp` publishes `ytdl-rmcp` to npm. MCP clients
   should launch with `npx -y @dinglebear/rytdl`; the npm postinstall/lazy installer
   downloads the matching GitHub Release binary.
