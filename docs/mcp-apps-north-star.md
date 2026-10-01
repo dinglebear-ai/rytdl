@@ -25,7 +25,7 @@ on top without becoming the core dependency.
 | Tool routing and app-callable tools | `src/mcp.rs` |
 | Embedded widget | `assets/youtube-search-app.html` |
 | Contract tests | `src/search_app_tests.rs`, `src/mcp_tests.rs` |
-| User docs | `README.md`, `openwiki/architecture/overview.md` |
+| User docs | `README.md` |
 
 When copying the pattern to another server, copy the contract shape, not the
 YouTube-specific UI.
